@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editor Skrip Konten: Tantangan Ulangan Teks Rekon Kelas 9</title>
+  <style>
+    :root {
+      --bg-main: #0b0f19;
+      --card-bg: #151e2e;
+      --border-color: #283548;
+      --accent-gold: #f59e0b;
+      --emerald: #10b981;
+      --rose: #ef4444;
+      --indigo: #6366f1;
+      --indigo-hover: #4f46e5;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .app-card {
+      width: 100%;
+      max-width: 720px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 25px 35px -5px rgba(0, 0, 0, 0.7);
+      position: relative;
+    }
+
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #080c14;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px 18px;
+      margin-bottom: 16px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .badge-info {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .badge-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .hud-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .shield-pill {
+      background: #14532d;
+      color: #6ee7b7;
+      border: 1px solid var(--emerald);
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .shield-off {
+      background: #1e293b;
+      color: #94a3b8;
+      border-color: #334155;
+    }
+
+    .point-pill {
+      background: #78350f;
+      color: #fde68a;
+      border: 1px solid var(--accent-gold);
+      padding: 5px 14px;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .timer-container {
+      width: 100%;
+      background: #1e293b;
+      border-radius: 9999px;
+      height: 8px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .timer-bar {
+      height: 100%;
+      width: 100%;
+      background: var(--emerald);
+      transition: width 1s linear, background-color 0.3s;
+    }
+
+    .timer-text-box {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+    }
+
+    .timer-countdown {
+      font-weight: 800;
+      color: var(--accent-gold);
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: var(--indigo);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--indigo-hover);
+    }
+
+    .btn-bet {
+      background: #080c14;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-bet:hover {
+      border-color: var(--accent-gold);
+      background: #1a2436;
+    }
+
+    .btn-allin {
+      background: #b45309;
+      color: #fff;
+      border: 1px solid var(--accent-gold);
+    }
+
+    .btn-allin:hover {
+      background: #d97706;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px;
+      background: #080c14;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 15px;
+      margin-bottom: 14px;
+      outline: none;
+    }
+
+    .input-field:focus {
+      border-color: var(--indigo);
+    }
+
+    .script-box {
+      background: #080c14;
+      border-left: 4px solid var(--accent-gold);
+      padding: 14px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 14px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #e2e8f0;
+    }
+
+    .option-btn {
+      width: 100%;
+      background: #080c14;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 13px 15px;
+      text-align: left;
+      color: #fff;
+      cursor: pointer;
+      font-size: 13.5px;
+      line-height: 1.45;
+      margin-bottom: 9px;
+      transition: all 0.2s;
+    }
+
+    .option-btn:hover {
+      border-color: var(--indigo);
+      background: #1a2436;
+    }
+
+    .shop-box {
+      background: #080c14;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .feedback-box {
+      background: #080c14;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px;
+      margin: 16px 0;
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+
+    .stage-pill {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--indigo);
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .timer-select-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .timer-opt-btn {
+      flex: 1;
+      padding: 9px;
+      background: #080c14;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: #cbd5e1;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .timer-opt-btn.active {
+      border-color: var(--accent-gold);
+      background: #1f293d;
+      color: var(--accent-gold);
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-card">
+    
+    <!-- HEADER BAR -->
+    <div class="header-bar">
+      <div>
+        <div class="badge-info" id="hud-name">Editor: Tamu</div>
+        <div class="badge-sub" id="hud-progress">Babak 1 • Naskah 1/12</div>
+      </div>
+      <div class="hud-pills">
+        <div class="shield-pill shield-off" id="hud-shield">🛡️ Shield: OFF</div>
+        <div class="point-pill">
+          🪙 <span id="hud-points">1000</span> Poin
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMER BAR -->
+    <div id="timer-wrapper" style="display: none;">
+      <div class="timer-text-box">
+        <span>⏱️ Batas Waktu Penyuntingan Naskah:</span>
+        <span class="timer-countdown" id="timer-num">25s</span>
+      </div>
+      <div class="timer-container" style="display: block;">
+        <div class="timer-bar" id="timer-bar"></div>
+      </div>
+    </div>
+
+    <!-- SCREEN 1: START SCREEN -->
+    <div id="screen-start" class="screen active">
+      <div style="text-align:center; margin-bottom: 16px;">
+        <span style="background:var(--rose); color:#fff; font-size:11px; padding:3px 8px; border-radius:4px; font-weight:700;">HIGH-STAKES RECON EDITOR</span>
+        <h2 style="color:var(--accent-gold); margin-top: 8px;">DIGITAL SCRIPT CONTENT EDITOR</h2>
+      </div>
+      <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6;">
+        Selamat datang di meja redaksi digital tingkat lanjut! Soal-soal telah direkayasa dengan tingkat pengecoh tinggi (HOTS), menguji pemahaman mendalam tentang Teks Rekon, verba mental/material, analisis kalimat per kalimat, konjungsi kausal/temporal, hingga EYD V.
+      </p>
+
+      <label style="font-size:12.5px; font-weight:700; display:block; margin-bottom:6px;">Nama Siswa / Redaktur:</label>
+      <input type="text" id="player-input" class="input-field" placeholder="Masukkan nama lengkapmu..." autocomplete="off">
+
+      <label style="font-size:12.5px; font-weight:700; display:block; margin-bottom:6px;">Mode Timer (Batas Waktu Menjawab):</label>
+      <div class="timer-select-group">
+        <div class="timer-opt-btn active" onclick="selectTimerMode(25, this)">⏱️ 25 Detik (Normal)</div>
+        <div class="timer-opt-btn" onclick="selectTimerMode(15, this)">⚡ 15 Detik (Hardcore)</div>
+        <div class="timer-opt-btn" onclick="selectTimerMode(0, this)">⏸️ Tanpa Waktu</div>
+      </div>
+
+      <button class="btn btn-primary" onclick="handleStartGame()">MULAI TANTANGAN REDAKSI ➔</button>
+    </div>
+
+    <!-- SCREEN 2: TARUHAN & WORKSHOP BANTUAN -->
+    <div id="screen-shop" class="screen">
+      <span class="stage-pill" id="shop-stage-tag">BABAK 1</span>
+      <h3 id="shop-title" style="margin-bottom: 4px;">Penyuntingan Naskah</h3>
+      <p id="shop-desc" style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px;"></p>
+
+      <h4 style="color: var(--accent-gold); margin-bottom: 8px; font-size: 13.5px;">🛠️ Toko Bantuan Redaksi:</h4>
+
+      <div class="shop-box">
+        <div>
+          <div style="font-size: 13px; font-weight: 700;">🛡️ Pelindung Poin</div>
+          <div style="font-size: 11px; color: var(--text-muted);">Poin aman dan tidak terpotong jika keliru 1 kali.</div>
+        </div>
+        <button class="btn-bet" style="padding: 6px 12px; font-size: 12px;" onclick="buyTool('shield', 200)">Beli (200 P)</button>
+      </div>
+
+      <div class="shop-box">
+        <div>
+          <div style="font-size: 13px; font-weight: 700;">🔍 Bantuan 50:50</div>
+          <div style="font-size: 11px; color: var(--text-muted);">Eliminasi 2 pilihan jawaban pengecoh yang paling mengecoh.</div>
+        </div>
+        <button class="btn-bet" style="padding: 6px 12px; font-size: 12px;" onclick="buyTool('fifty', 300)">Beli (300 P)</button>
+      </div>
+
+      <div style="margin-top: 14px;">
+        <h4 style="margin-bottom: 8px; font-size: 13.5px;">Pasang Taruhan Reputasi Poin:</h4>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+          <button class="btn-bet" onclick="setWager(100)">🪙 100 P</button>
+          <button class="btn-bet" onclick="setWager(200)">🪙 200 P</button>
+          <button class="btn-bet" onclick="setWager(500)">🪙 500 P</button>
+        </div>
+        <button class="btn-bet btn-allin" style="width: 100%; margin-top: 8px;" onclick="setWager('ALL')">🔥 ALL-IN (PASANG SEMUA MODAL)</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: SOAL / PENYUNTINGAN SKRIP -->
+    <div id="screen-quiz" class="screen">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+        <span class="stage-pill" id="quiz-stage-tag">BABAK 1</span>
+        <span style="font-size: 13px; color: var(--accent-gold); font-weight: 700;">Taruhan: <span id="quiz-wager-disp">0</span></span>
+      </div>
+
+      <div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 6px;">[DRAF NASKAH REDAKSI]:</div>
+      <div class="script-box" id="quiz-script-content"></div>
+
+      <div id="quiz-question-text" style="font-size: 14px; font-weight: 700; margin-bottom: 12px;"></div>
+      <div id="quiz-options-container"></div>
+    </div>
+
+    <!-- SCREEN 4: PEMBAHASAN & EVALUASI -->
+    <div id="screen-feedback" class="screen">
+      <h3 id="feedback-headline" style="margin-bottom: 8px;"></h3>
+      <div class="feedback-box">
+        <strong style="color: var(--accent-gold); display: block; margin-bottom: 6px;">📋 Catatan Editor Senior & Analisis Soal:</strong>
+        <p id="feedback-detail" style="color: #cbd5e1;"></p>
+      </div>
+      <button class="btn btn-primary" onclick="proceedNextQuestion()">LANJUT KE NASKAH BERIKUTNYA ➔</button>
+    </div>
+
+    <!-- SCREEN 5: GAME OVER -->
+    <div id="screen-gameover" class="screen" style="text-align:center;">
+      <h1 style="color: var(--rose); font-size: 40px; margin-bottom: 8px;">💥 POIN HABIS!</h1>
+      <h3 style="color: #cbd5e1; margin-bottom: 12px;">Kontrak Redaksi Berakhir</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;">
+        Saldo poinmu menjadi 0 akibat kegagalan analisis atau kehabisan waktu pada taruhan tinggi. Perhatikan detail pengecoh kebahasaan dan kelola poin lebih cermat!
+      </p>
+      <button class="btn btn-primary" onclick="restartGame()">ULANGI DARI SOAL 1 🔄</button>
+    </div>
+
+    <!-- SCREEN 6: VICTORY -->
+    <div id="screen-victory" class="screen" style="text-align:center;">
+      <h1 style="color: var(--emerald); font-size: 34px; margin-bottom: 8px;">🏆 REDAKTUR UTAMA BERSERTIFIKAT!</h1>
+      <h3 style="color: #cbd5e1; margin-bottom: 16px;">Semua Uji Naskah Berhasil Dipecahkan</h3>
+
+      <div style="background: #080c14; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+        <p style="font-size: 13px; color: var(--text-muted);">Skor Poin Akhir:</p>
+        <h2 style="color: var(--accent-gold); font-size: 38px; margin: 6px 0;" id="victory-points">0</h2>
+        <div style="font-size: 15px; font-weight: 700; color: #fff;" id="victory-title">Predikat: Master Teks Rekon</div>
+      </div>
+
+      <button class="btn btn-primary" onclick="restartGame()">MAIN LAGI (CETAK REKOR BARU) 🔄</button>
+    </div>
+
+  </div>
+
+  <script>
+    const rawQuestions = [
+      // BABAK 1
+      {
+        stageNum: 1,
+        stageName: "BABAK 1: JENIS & STRUKTUR TEKS REKON",
+        stageDesc: "Klasifikasi ragam rekon berdasarkan sifat verifikasi fakta dan analisis struktur mikro.",
+        script: "Menjelang tengah malam 23 Maret 1946, Kolonel A.H. Nasution selaku Komandan Divisi III TRI menginstruksikan evakuasi massal warga Bandung ke arah selatan sebelum fasilitas vital diledakkan. Keputusan ini diambil setelah ultimatum Sekutu agar TRI mengosongkan kota sejauh 11 kilometer ditolak mentah-mentah.",
+        question: "Dilihat dari fokus penceritaan dan validitas dokumen historisnya, alasan paling ilmiah teks di atas digolongkan sebagai Rekon Faktual (bukan Rekon Pribadi) adalah...",
+        options: [
+          { text: "Berfokus pada peristiwa publik yang dapat diuji silang dengan arsip sejarah resmi dan bukan pengalaman subjektif penulis.", isCorrect: true },
+          { text: "Menggunakan sudut pandang orang pertama pelaku sampingan yang menyaksikan langsung peristiwa evakuasi.", isCorrect: false },
+          { text: "Disusun dengan gaya bahasa imajinatif untuk membangkitkan empati emosional tanpa memedulikan akurasi tanggal.", isCorrect: false },
+          { text: "Berisi rangkaian opini tokoh militer yang belum disepakati dalam perundingan diplomatik resmi.", isCorrect: false }
+        ],
+        explanation: "Rekon Faktual menyajikan rekaman peristiwa publik berbasis data dan arsip historis yang dapat diverifikasi kebenarannya secara objektif, tanpa keterlibatan subjektif penulis secara langsung."
+      },
+      {
+        stageNum: 1,
+        stageName: "BABAK 1: JENIS & STRUKTUR TEKS REKON",
+        stageDesc: "Klasifikasi ragam rekon berdasarkan sifat verifikasi fakta dan analisis struktur mikro.",
+        script: "(1) Sejak fajar menyingsing, kepanikan melanda warga di bantaran rel.<br>(2) Aku bersama regu PMR SMP segera mendirikan posko darurat di selasar balai desa.<br>(3) Kami membagikan ratusan selimut hingga senja tiba.<br>(4) Hari itu memberiku kesadaran batin bahwa ketangguhan sejati lahir saat kita bersedia memprioritaskan keselamatan orang lain dibanding kepanikan diri sendiri.",
+        question: "Kalimat yang berfungsi mutlak sebagai struktur Reorientasi yang membedakannya dari Urutan Peristiwa (Events) adalah...",
+        options: [
+          { text: "Kalimat (4), karena berisi refleksi filosofis dan evaluasi personal penulis terhadap hikmah dari peristiwa.", isCorrect: true },
+          { text: "Kalimat (1), karena memperkenalkan situasi latar waktu dan suasana awal kejadian secara dramatis.", isCorrect: false },
+          { text: "Kalimat (2), karena menyajikan pengenalan tokoh 'Aku' beserta tindakan pertama yang diambil di lapangan.", isCorrect: false },
+          { text: "Kalimat (3), karena menutup aktivitas fisik pembagian bantuan pada penghujung waktu senja.", isCorrect: false }
+        ],
+        explanation: "Reorientasi berisi pandangan akhir, komentar pribadi, atau simpulan hikmah batiniah penulis atas rentetan kejadian. Kalimat (4) jelas memuat refleksi nilai ketangguhan."
+      },
+      {
+        stageNum: 1,
+        stageName: "BABAK 1: JENIS & STRUKTUR TEKS REKON",
+        stageDesc: "Klasifikasi ragam rekon berdasarkan sifat verifikasi fakta dan analisis struktur mikro.",
+        script: "Pada Jumat legi tanggal 17 Agustus 1945, tepat pukul 10.00 di serambi rumah Jalan Pegangsaan Timur 56, naskah ringkas hasil ketikan Sayuti Melik itu akhirnya dibacakan di bawah tatapan haru para hadirin yang berkumpul tanpa pengawalan militer resmi.",
+        question: "Unsur orientasi teks di atas dirancang sangat padu karena secara simultan menjawab variabel ADIKSIMBA utama, yaitu...",
+        options: [
+          { text: "Kapan (waktu spesifik), Di mana (tempat presisi), Apa (peristiwa inti), dan Siapa (tokoh yang terlibat/hadir).", isCorrect: true },
+          { text: "Mengapa teks diketik, Berapa biaya pembuatan bendera, dan Bagaimana reaksi tentara Sekutu di Jakarta.", isCorrect: false },
+          { text: "Hanya menjelaskan alasan diplomatik (Mengapa) dan rincian proses perundingan Rengasdengklok (Bagaimana).", isCorrect: false },
+          { text: "Siapa pembawa baki bendera dan ke mana naskah asli proklamasi kemudian disimpan pada sore harinya.", isCorrect: false }
+        ],
+        explanation: "Bagian orientasi tersebut secara presisi menjawab: Kapan (Jumat, 17 Agustus 1945 pukul 10.00), Di mana (Jalan Pegangsaan Timur 56), Apa (pembacaan naskah), dan Siapa (hadirin & tokoh terkait)."
+      },
+      {
+        stageNum: 1,
+        stageName: "BABAK 1: JENIS & STRUKTUR TEKS REKON",
+        stageDesc: "Klasifikasi ragam rekon berdasarkan sifat verifikasi fakta dan analisis struktur mikro.",
+        script: "Setelah keluar dari lorong relativitas wormhole pada 23 September 2340, Kapten Arka menatap dua cincin es Neoterra yang berpendar keperakan. Sensor kokpit mencatat penurunan radiasi atmosfer, lalu kru ekspedisi segera menurunkan modul eksplorasi pertama ke permukaan kawah.",
+        question: "Meskipun bertema fiksi spekulatif ruang angkasa, draf di atas tetap sah memenuhi syarat genre 'Teks Rekon' karena...",
+        options: [
+          { text: "Mempertahankan prinsip kronologis berurutan (urutan kejadian berbasis garis waktu penjelajahan yang runtut).", isCorrect: true },
+          { text: "Menggunakan istilah teknis astrofisika yang sudah dibuktikan secara empiris di laboratorium saat ini.", isCorrect: false },
+          { text: "Tidak menampilkan dialog antartokoh sehingga struktur ceritanya persis seperti berita laporan cuaca.", isCorrect: false },
+          { text: "Berisi kisah biografi tokoh pahlawan antariksa yang telah terdaftar dalam arsip penjelajahan nasional.", isCorrect: false }
+        ],
+        explanation: "Ciri esensial teks rekon imajinatif adalah mempertahankan konstruksi urutan waktu linier (kronologis) dalam mengisahkan kejadian, kendati peristiwanya murni hasil rekaan imajinasi penulis."
+      },
+
+      // BABAK 2
+      {
+        stageNum: 2,
+        stageName: "BABAK 2: KAIDAH KEBAHASAAN & EJAAN",
+        stageDesc: "Distingsi verba material vs mental, relasi konjungsi, dan koreksi ejaan EYD V tingkat presisi.",
+        script: "Perhatikan cuplikan kalimat berikut:<br><em>'Polisi khusus menggeledah ruangan arsip lama, sedangkan para saksi mengkhawatirkan keselamatan dokumen rahasia tersebut.'</em>",
+        question: "Analisis kategori gramatikal yang paling tepat terhadap kata 'menggeledah' dan 'mengkhawatirkan' adalah...",
+        options: [
+          { text: "'Menggeledah' adalah verba material (tindakan fisik nyata), sedangkan 'mengkhawatirkan' adalah verba mental (kondisi persepsi/afeksi batin).", isCorrect: true },
+          { text: "'Menggeledah' adalah verba mental karena membutuhkan konsentrasi pikiran, sedangkan 'mengkhawatirkan' adalah verba relasional.", isCorrect: false },
+          { text: "Keduanya merupakan verba material aktif karena subjek kedua klausa melakukan tindakan kasatmata.", isCorrect: false },
+          { text: "Keduanya tergolong verba pasif karena menyatakan keadaan yang dialami oleh objek penderita.", isCorrect: false }
+        ],
+        explanation: "'Menggeledah' melibatkan aktivitas gerak jasmani/fisik (verba material), sedangkan 'mengkhawatirkan' menyatakan respons emosional atau kecemasan pikiran (verba mental)."
+      },
+      {
+        stageNum: 2,
+        stageName: "BABAK 2: KAIDAH KEBAHASAAN & EJAAN",
+        stageDesc: "Distingsi verba material vs mental, relasi konjungsi, dan koreksi ejaan EYD V tingkat presisi.",
+        script: "Draf Naskah Bermasalah:<br><em>'Petugas menyegel pintu masuk setelah api padam, sehingga warga dilarang mendekat karena dikhawatirkan terdapat sisa gas beracun.'</em>",
+        question: "Klasifikasi fungsi konjungsi 'setelah', 'sehingga', dan 'karena' secara berturut-turut adalah...",
+        options: [
+          { text: "Temporal (urutan waktu), Konsekuensi/akibat, dan Kausalitas (alasan/sebab).", isCorrect: true },
+          { text: "Kausalitas, Temporal, dan Korelatif pertentangan.", isCorrect: false },
+          { text: "Temporal, Syarat kondisional, dan Kausalitas komparatif.", isCorrect: false },
+          { text: "Finalitas (tujuan), Kausalitas sebab, dan Temporal konsesif.", isCorrect: false }
+        ],
+        explanation: "'Setelah' menandai waktu (temporal), 'sehingga' menandai dampak/akibat, dan 'karena' menandai hubungan sebab/alasan (kausalitas)."
+      },
+      {
+        stageNum: 2,
+        stageName: "BABAK 2: KAIDAH KEBAHASAAN & EJAAN",
+        stageDesc: "Distingsi verba material vs mental, relasi konjungsi, dan koreksi ejaan EYD V tingkat presisi.",
+        script: "Teks Draf Editor:<br><em>'Upacara sumpah pemuda diselenggarakan dipusat kota bandung pada hari rabu, 28 oktober kemarin.'</em>",
+        question: "Penyuntingan draf naskah di atas yang sepenuhnya mematuhi kaidah PUEBI / EYD Edisi V adalah...",
+        options: [
+          { text: "'Upacara Sumpah Pemuda diselenggarakan di pusat Kota Bandung pada hari Rabu, 28 Oktober kemarin.'", isCorrect: true },
+          { text: "'Upacara sumpah pemuda diselenggarakan dipusat kota Bandung pada hari rabu, 28 Oktober kemarin.'", isCorrect: false },
+          { text: "'Upacara Sumpah Pemuda diselenggarakan di-pusat Kota Bandung pada Hari Rabu, 28 oktober kemarin.'", isCorrect: false },
+          { text: "'Upacara Sumpah pemuda diselenggarakan di pusat kota bandung pada hari Rabu, 28 Oktober kemarin.'", isCorrect: false }
+        ],
+        explanation: "Nama peristiwa sejarah resmi (Sumpah Pemuda), nama geografi/wilayah administratif (Kota Bandung), nama hari (Rabu), nama bulan (Oktober) wajib kapital; kata depan penunjuk lokasi 'di pusat' wajib dipisah."
+      },
+      {
+        stageNum: 2,
+        stageName: "BABAK 2: KAIDAH KEBAHASAAN & EJAAN",
+        stageDesc: "Distingsi verba material vs mental, relasi konjungsi, dan koreksi ejaan EYD V tingkat presisi.",
+        script: "Perhatikan draf laporan berikut:<br><em>'Pihak manajemen melakukan audit internal antar divisi demi merapikan sistem pasca bayar yang sempat bermasalah.'</em>",
+        question: "Penyuntingan bentuk terikat (klitik) berdasarkan kaidah ortografi baku bahasa Indonesia yang tepat adalah...",
+        options: [
+          { text: "'antar divisi' menjadi 'antardivisi' dan 'pasca bayar' menjadi 'pascabayar' (keduanya ditulis serangkai).", isCorrect: true },
+          { text: "'antar divisi' tetap dipisah, namun 'pasca bayar' wajib dihubungkan dengan tanda hubung (pasca-bayar).", isCorrect: false },
+          { text: "Keduanya sudah tepat dipisah karena 'divisi' dan 'bayar' merupakan kata dasar mandiri.", isCorrect: false },
+          { text: "'antar-divisi' memakai tanda hubung dan 'pascabayar' digabung hanya jika diikuti huruf kapital.", isCorrect: false }
+        ],
+        explanation: "Bentuk terikat seperti 'antar-', 'pasca-', 'sub-', 'ekstra-' wajib ditulis serangkai (melekat langsung) dengan kata dasar yang mengikutinya jika berupa kata umum berhuruf kecil: 'antardivisi' dan 'pascabayar'."
+      },
+
+      // BABAK 3
+      {
+        stageNum: 3,
+        stageName: "BABAK 3: KRONOLOGI & ANALISIS LOGIKA",
+        stageDesc: "Rekonstruksi kausalitas kronologis dan dekonstruksi dikotomi fakta vs opini bergradasi.",
+        script: "Potongan Narasi Acak:<br>(P) Tim forensik menyimpulkan korsleting pada generator genset sebagai pemicu utama percikan api.<br>(Q) Petugas pemadam menyemprotkan zat kimia busa khusus selama dua jam hingga asap mereda.<br>(R) Sirine kebakaran lantai dua berbunyi nyaring memicu evakuasi darurat para karyawan kantor.<br>(S) Percikan api menyambar tabung tiner di ruang penyimpanan bawah tanah.",
+        question: "Rekonstruksi alur runtut berdasarkan hukum kausalitas dan kronologi waktu teks rekon yang valid adalah...",
+        options: [
+          { text: "S ➔ R ➔ Q ➔ P (Percikan menyambar tabung ➔ sirine berbunyi ➔ pemadaman busa ➔ simpulan forensik)", isCorrect: true },
+          { text: "R ➔ S ➔ P ➔ Q (Sirine berbunyi ➔ percikan menyambar ➔ simpulan forensik ➔ pemadaman busa)", isCorrect: false },
+          { text: "P ➔ S ➔ R ➔ Q (Simpulan forensik ➔ percikan menyambar ➔ sirine berbunyi ➔ pemadaman busa)", isCorrect: false },
+          { text: "S ➔ Q ➔ R ➔ P (Percikan menyambar tabung ➔ pemadaman busa ➔ sirine berbunyi ➔ simpulan forensik)", isCorrect: false }
+        ],
+        explanation: "Urutan logis: (S) Api timbul dan menyambar bahan mudah terbakar ➔ (R) Alarm mendeteksi dan berbunyi sehingga terjadi evakuasi ➔ (Q) Upaya penanggulangan pemadaman ➔ (P) Penyelidikan pascakejadian oleh forensik."
+      },
+      {
+        stageNum: 3,
+        stageName: "BABAK 3: KRONOLOGI & ANALISIS LOGIKA",
+        stageDesc: "Rekonstruksi kausalitas kronologis dan dekonstruksi dikotomi fakta vs opini bergradasi.",
+        script: "Paragraf Rekon Liputan:<br>(1) Pertandingan final turnamen antarkelas berakhir dengan skor seri 1-1 pada babak normal.<br>(2) Sebanyak 400 tiket tribun ludes terjual dalam kurun waktu 30 menit sejak loket dibuka.<br>(3) Wasit meniup peluit panjang tanda babak adu penalti dimulai.<br>(4) Pertandingan tersebut merupakan laga paling membosankan dan mengecewakan yang pernah diselenggarakan OSIS.",
+        question: "Kalimat yang memuat klaim opini bernuansa peyoratif (subjektifitas murni) yang wajib disunting oleh editor adalah...",
+        options: [
+          { text: "Kalimat (4), karena menggunakan indikator leksikal emotif 'paling membosankan dan mengecewakan' yang tidak berbasis tolok ukur objektif.", isCorrect: true },
+          { text: "Kalimat (2), karena memuat angka 400 tiket dan durasi 30 menit yang belum diverifikasi bendahara.", isCorrect: false },
+          { text: "Kalimat (1), karena hasil skor seri 1-1 belum tentu disepakati oleh kapten kedua kesebelasan.", isCorrect: false },
+          { text: "Kalimat (3), karena suara peluit wasit merupakan interpretasi pendengaran penonton di lapangan.", isCorrect: false }
+        ],
+        explanation: "Kalimat (4) memuat adjudikasi subjektif dan evaluasi emosional ('paling membosankan dan mengecewakan') yang merupakan opini personal, bukan fakta peristiwa terukur."
+      },
+      {
+        stageNum: 3,
+        stageName: "BABAK 3: KRONOLOGI & ANALISIS LOGIKA",
+        stageDesc: "Rekonstruksi kausalitas kronologis dan dekonstruksi dikotomi fakta vs opini bergradasi.",
+        script: "Meskipun gelombang laut mulai meninggi hingga 1,5 meter, nahkoda kapal motor Samudra Baru tidak mengindahkan peringatan visual dari mercusuar karang dan tetap melajukan armadanya menuju muara sempit tanpa menyalakan lampu kabut.",
+        question: "Berdasarkan rincian teks laporan peristiwa di atas, inferensi sebab-akibat yang paling valid adalah...",
+        options: [
+          { text: "Faktor kelalaian manusia (human error) berupa pengabaian sinyal navigasi dan standar keselamatan memicu risiko bahaya berlayar.", isCorrect: true },
+          { text: "Kerusakan mekanis pada mesin kapal motor terjadi murni akibat terhantam gelombang setinggi 1,5 meter.", isCorrect: false },
+          { text: "Petugas mercusuar karang lalai mengirimkan sinyal bahaya visual kepada armada kapal motor yang melintas.", isCorrect: false },
+          { text: "Nahkoda memutuskan putar balik haluan kapal demi menghindari kabut tebal di mulut muara.", isCorrect: false }
+        ],
+        explanation: "Teks eksplisit menegaskan nahkoda 'tidak mengindahkan peringatan visual mercusuar' dan 'tidak menyalakan lampu kabut', yang merupakan bukti nyata kelalaian prosedur manusia (human error)."
+      },
+      {
+        stageNum: 3,
+        stageName: "BABAK 3: KRONOLOGI & ANALISIS LOGIKA",
+        stageDesc: "Rekonstruksi kausalitas kronologis dan dekonstruksi dikotomi fakta vs opini bergradasi.",
+        script: "Pada Oktober 1928, saat meneliti koloni bakteri staphylococcus yang dibiakkan, Alexander Fleming mencatat adanya zona hambat melingkar di sekitar kapang jamur Penicillium notatum yang tumbuh secara tidak sengaja di cawannya. Jamur tersebut menghasilkan substansi yang melisiskan dinding sel bakteri patogen, yang kelak diisolasi sebagai antibiotik pertama di dunia.",
+        question: "Simpulan induktif yang paling akurat dari teks rekon sejarah sains di atas adalah...",
+        options: [
+          { text: "Kecermatan Fleming dalam mengamati kontaminasi jamur yang tak terduga menjadi fondasi penemuan antibiotik penisilin.", isCorrect: true },
+          { text: "Bakteri staphylococcus secara sengaja dimutasi oleh Fleming untuk membentuk jamur pelindung tubuh.", isCorrect: false },
+          { text: "Penisilin diciptakan secara instan di pabrik farmasi modern tanpa melalui fase uji kultur mikroorganisme.", isCorrect: false },
+          { text: "Semua jenis jamur kapang liar memiliki kemampuan yang sama dalam membunuh kuman penyakit manusia.", isCorrect: false }
+        ],
+        explanation: "Simpulan merangkum esensi bahwa pengamatan jeli Fleming terhadap fenomena kontaminasi tak terencana (serendipitas) menjadi titik awal revolusi antibiotik penisilin."
+      }
+    ];
+
+    let questionBank = [];
+    let currentQuestionIndex = 0;
+    let points = 1000;
+    let currentBet = 0;
+    let hasPointShield = false;
+    let isFiftyFiftyActive = false;
+    let playerName = "Editor";
+    
+    let timerDuration = 25;
+    let currentTimer = 25;
+    let timerInterval = null;
+
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function initQuestions() {
+      questionBank = rawQuestions.map(item => {
+        return {
+          ...item,
+          options: shuffleArray(item.options)
+        };
+      });
+    }
+
+    function selectTimerMode(seconds, el) {
+      timerDuration = seconds;
+      document.querySelectorAll(".timer-opt-btn").forEach(btn => btn.classList.remove("active"));
+      el.classList.add("active");
+    }
+
+    function updateHud() {
+      document.getElementById("hud-name").textContent = "Editor: " + playerName;
+      const stageText = questionBank[currentQuestionIndex] ? questionBank[currentQuestionIndex].stageNum : 3;
+      document.getElementById("hud-progress").textContent = "Babak " + stageText + " • Naskah " + Math.min(currentQuestionIndex + 1, questionBank.length) + "/12";
+      document.getElementById("hud-points").textContent = points;
+
+      const shieldEl = document.getElementById("hud-shield");
+      if (hasPointShield) {
+        shieldEl.textContent = "🛡️ Shield: ON";
+        shieldEl.className = "shield-pill";
+      } else {
+        shieldEl.textContent = "🛡️ Shield: OFF";
+        shieldEl.className = "shield-pill shield-off";
+      }
+    }
+
+    function switchScreen(screenId) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById(screenId).classList.add("active");
+    }
+
+    function handleStartGame() {
+      const inputVal = document.getElementById("player-input").value.trim();
+      if (!inputVal) {
+        alert("Silakan masukkan nama redaktur terlebih dahulu.");
+        return;
+      }
+      playerName = inputVal;
+      initQuestions();
+      updateHud();
+      openShopStage();
+    }
+
+    function openShopStage() {
+      clearInterval(timerInterval);
+      document.getElementById("timer-wrapper").style.display = "none";
+
+      if (currentQuestionIndex >= questionBank.length) {
+        showVictoryScreen();
+        return;
+      }
+
+      const q = questionBank[currentQuestionIndex];
+      document.getElementById("shop-stage-tag").textContent = q.stageName;
+      document.getElementById("shop-title").textContent = "Penyuntingan Naskah Ke-" + (currentQuestionIndex + 1) + " dari 12";
+      document.getElementById("shop-desc").textContent = q.stageDesc;
+      
+      updateHud();
+      switchScreen("screen-shop");
+    }
+
+    function buyTool(toolType, cost) {
+      if (points < cost) {
+        alert("Poin Anda tidak mencukupi untuk membeli perlengkapan ini.");
+        return;
+      }
+
+      if (toolType === 'shield') {
+        if (hasPointShield) {
+          alert("Pelindung Poin Anda sudah aktif!");
+          return;
+        }
+        points -= cost;
+        hasPointShield = true;
+        alert("🛡️ Pelindung Poin aktif! 1 kesalahan penyuntingan tidak akan memotong modal poin Anda.");
+      } else if (toolType === 'fifty') {
+        if (isFiftyFiftyActive) {
+          alert("Bantuan 50:50 sudah aktif pada naskah ini!");
+          return;
+        }
+        points -= cost;
+        isFiftyFiftyActive = true;
+        alert("🔍 Bantuan 50:50 aktif! 2 opsi distractor paling mengecoh akan dieliminasi.");
+      }
+
+      updateHud();
+    }
+
+    function setWager(amount) {
+      if (amount === 'ALL') {
+        currentBet = points;
+      } else {
+        currentBet = amount;
+      }
+
+      if (currentBet > points || points <= 0) {
+        alert("Poin Anda tidak mencukupi untuk memasang taruhan sebesar itu.");
+        return;
+      }
+
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      const q = questionBank[currentQuestionIndex];
+      document.getElementById("quiz-stage-tag").textContent = q.stageName.split(":")[0];
+      document.getElementById("quiz-wager-disp").textContent = currentBet + " Poin";
+      
+      document.getElementById("quiz-script-content").innerHTML = q.script;
+      document.getElementById("quiz-question-text").textContent = q.question;
+
+      const container = document.getElementById("quiz-options-container");
+      container.innerHTML = "";
+
+      const optLetters = ["A", "B", "C", "D"];
+      let optionsList = q.options.map((opt, idx) => ({ ...opt, displayIdx: idx }));
+
+      if (isFiftyFiftyActive) {
+        const wrongOpts = optionsList.filter(o => !o.isCorrect);
+        const removed = wrongOpts.slice(0, 2);
+        optionsList = optionsList.filter(o => !removed.includes(o));
+      }
+
+      optionsList.forEach((item, index) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.innerHTML = "<strong>" + optLetters[index] + ".</strong> " + item.text;
+        btn.onclick = () => submitEditorChoice(item.isCorrect);
+        container.appendChild(btn);
+      });
+
+      switchScreen("screen-quiz");
+      startQuestionTimer();
+    }
+
+    function startQuestionTimer() {
+      if (timerDuration <= 0) {
+        document.getElementById("timer-wrapper").style.display = "none";
+        return;
+      }
+
+      document.getElementById("timer-wrapper").style.display = "block";
+      currentTimer = timerDuration;
+      const timerNum = document.getElementById("timer-num");
+      const timerBar = document.getElementById("timer-bar");
+
+      timerNum.textContent = currentTimer + "s";
+      timerBar.style.width = "100%";
+      timerBar.style.backgroundColor = "var(--emerald)";
+
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        currentTimer--;
+        timerNum.textContent = currentTimer + "s";
+        const percentage = (currentTimer / timerDuration) * 100;
+        timerBar.style.width = percentage + "%";
+
+        if (currentTimer <= 7) {
+          timerBar.style.backgroundColor = "var(--rose)";
+        } else if (currentTimer <= 14) {
+          timerBar.style.backgroundColor = "var(--accent-gold)";
+        }
+
+        if (currentTimer <= 0) {
+          clearInterval(timerInterval);
+          handleTimeOut();
+        }
+      }, 1000);
+    }
+
+    function handleTimeOut() {
+      alert("⏰ WAKTU HABIS! Redaksi terlambat menyerahkan naskah.");
+      submitEditorChoice(false, true);
+    }
+
+    function submitEditorChoice(isCorrect, isTimeout) {
+      if (typeof isTimeout === 'undefined') isTimeout = false;
+      clearInterval(timerInterval);
+      document.getElementById("timer-wrapper").style.display = "none";
+
+      const q = questionBank[currentQuestionIndex];
+      const headlineEl = document.getElementById("feedback-headline");
+      const detailEl = document.getElementById("feedback-detail");
+
+      if (isCorrect) {
+        points += currentBet;
+        headlineEl.innerHTML = '<span style="color:var(--emerald);">✅ SUNtingan TEPAT & CERMAT! (+' + currentBet + ' Poin)</span>';
+      } else {
+        if (hasPointShield) {
+          hasPointShield = false;
+          headlineEl.innerHTML = '<span style="color:var(--accent-gold);">🛡️ KELIRU / TERLAMBAT (Terlindungi Shield - Modal Poin Utuh)</span>';
+        } else {
+          points -= currentBet;
+          const label = isTimeout ? "WAKTU HABIS!" : "SUNtingan KELIRU!";
+          headlineEl.innerHTML = '<span style="color:var(--rose);">❌ ' + label + ' (-' + currentBet + ' Poin)</span>';
+        }
+      }
+
+      isFiftyFiftyActive = false;
+      updateHud();
+      detailEl.textContent = q.explanation;
+
+      if (points <= 0) {
+        switchScreen("screen-gameover");
+      } else {
+        switchScreen("screen-feedback");
+      }
+    }
+
+    function proceedNextQuestion() {
+      currentQuestionIndex++;
+      openShopStage();
+    }
+
+    function showVictoryScreen() {
+      clearInterval(timerInterval);
+      document.getElementById("timer-wrapper").style.display = "none";
+
+      document.getElementById("victory-points").textContent = points + " Poin";
+      let rank = "Editor Pemula";
+      if (points >= 4000) {
+        rank = "🥇 Pemimpin Redaksi (Chief Editor) - Sempurna!";
+      } else if (points >= 2500) {
+        rank = "🥈 Redaktur Senior Teks Rekon";
+      } else if (points >= 1000) {
+        rank = "🥉 Korektor Naskah Terampil";
+      }
+
+      document.getElementById("victory-title").textContent = "Predikat Akhir: " + rank;
+      switchScreen("screen-victory");
+    }
+
+    function restartGame() {
+      clearInterval(timerInterval);
+      document.getElementById("timer-wrapper").style.display = "none";
+
+      points = 1000;
+      currentQuestionIndex = 0;
+      currentBet = 0;
+      hasPointShield = false;
+      isFiftyFiftyActive = false;
+      initQuestions();
+      updateHud();
+      switchScreen("screen-start");
+    }
+  </script>
+</body>
+</html>
