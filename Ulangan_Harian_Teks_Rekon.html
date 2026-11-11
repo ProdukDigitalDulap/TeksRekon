@@ -399,7 +399,7 @@
           <strong style="color: var(--danger);" id="res-cheat-val">0 Kali</strong>
         </div>
         <div style="display: flex; justify-content: space-between;">
-          <span>Waktu Pengumpulkan:</span>
+          <span>Waktu Pengumpulan:</span>
           <strong id="res-time-val">-</strong>
         </div>
       </div>
@@ -460,7 +460,7 @@
       document.getElementById("cheat-modal").style.display = "none";
     }
 
-    // MASTER DATABASE SOAL (BERDASARKAN TEMPLATE DOCX)
+    // MASTER DATABASE SOAL (BERDASARKAN TEMPLATE DOCX DENGAN PENGEMBANGAN MATRIX BENAR/SALAH)
     const questionsMaster = [
       {
         id: 1, type: 'pilihan_ganda', weight: 10,
@@ -706,46 +706,76 @@
       },
       {
         id: 29, type: 'benar_salah', weight: 10,
-        q: "Teks rekon faktual (seperti berita sejarah atau laporan ilmiah) menyajikan fakta peristiwa masa lalu secara objektif tanpa memasukkan unsur khayalan rekaan pengarang.",
-        statements: ["Kesesuaian Teks Rekon Faktual dengan Prinsip Keabsahan Data Objek"],
-        correct: ["Benar"],
-        expl: "Teks rekon faktual mengutamakan kebenaran data historis dan keabsahan fakta empiris tanpa rekaan imajinatif."
+        q: "Evaluasilah karakteristik dan kaidah esensial teks rekon faktual berdasarkan prinsip-prinsip kebahasaan dan struktur penulisan ilmiah/sejarah! Tentukan apakah setiap pernyataan berikut Benar atau Salah!",
+        statements: [
+          "Teks rekon faktual menyajikan fakta peristiwa masa lalu secara objektif tanpa memasukkan unsur khayalan rekaan pengarang.",
+          "Data waktu, tempat, dan rangkaian peristiwa dalam teks rekon sejarah dapat diuji keabsahannya berdasarkan sumber dokumentasi yang valid.",
+          "Penulis teks rekon faktual diperbolehkan mengubah kronologi sejarah demi menciptakan efek drama narasi yang menarik.",
+          "Penggunaan istilah teknis/ilmiah dan verba material menjadi salah satu ciri kebahasaan pendukung dalam rekon faktual."
+        ],
+        correct: ["Benar", "Benar", "Salah", "Benar"],
+        expl: "Rekon faktual mengutamakan kebenaran data empiris dan objektifitas alur kronologis tanpa rekaan imajinatif."
       },
       {
         id: 30, type: 'benar_salah', weight: 10,
-        q: "Bagian reorientasi dalam struktur teks rekon wajib selalu ada dan tidak boleh ditiadakan sama sekali oleh penulis dalam kondisi apa pun.",
-        statements: ["Sifat Keberadaan Struktur Reorientasi dalam Teks Rekon"],
-        correct: ["Salah"],
-        expl: "Bagian reorientasi bersifat opsional (pilihan manasuka); teks rekon tetap sah dan utuh meskipun reorientasi tidak dihadirkan secara eksplisit."
+        q: "Cermatilah analisis struktur pembangun teks rekon berikut! Tentukan apakah setiap pernyataan analisis berikut Benar atau Salah!",
+        statements: [
+          "Bagian orientasi berfungsi memberikan gambaran awal mengenai siapa, kapan, di mana, dan apa peristiwa yang terjadi.",
+          "Bagian reorientasi bersifat opsional (pilihan) dan memuat simpulan, komentar pribadi, atau refleksi penutup dari penulis.",
+          "Teks rekon dianggap tidak sah dan gugur strukturnya apabila tidak menghadirkan reorientasi di akhir naskah.",
+          "Urutan peristiwa (record of events) disusun secara acak tanpa mengindahkan konjungsi temporal."
+        ],
+        correct: ["Benar", "Benar", "Salah", "Salah"],
+        expl: "Reorientasi bersifat opsional, sedangkan urutan peristiwa wajib disusun secara kronologis runtut."
       },
       {
         id: 31, type: 'benar_salah', weight: 10,
-        q: "Kalimat 'Jenderal Soedirman memimpin perang gerilya dari atas tandu seraya melintasi hutan belantara Jawa' mengandung verba material (kata kerja aksi fisik).",
-        statements: ["Keberadaan Verba Material pada Kalimat Aktivitas Gerilya"],
-        correct: ["Benar"],
-        expl: "'Memimpin' dan 'melintasi' merupakan verba material yang menggambarkan tindakan perbuatan fisik di dunia nyata."
+        q: "Bacalah kalimat berikut!\n\"Jenderal Soedirman memimpin perang gerilya dari atas tandu seraya melintasi hutan belantara Jawa, kemudian beliau merumuskan taktik penyergapan bersama para pejuang.\"\nAnalisis fungsi kaidah kebahasaan pada kalimat di atas! Tentukan Benar atau Salah untuk setiap pernyataan berikut!",
+        statements: [
+          "Kata 'memimpin', 'melintasi', dan 'merumuskan' tergolong verba material karena menggambarkan aksi fisik nyata.",
+          "Kata 'kemudian' berfungsi sebagai konjungsi temporal intrakalimat penanda urutan waktu antarkejadian.",
+          "Frasa 'hutan belantara Jawa' menduduki fungsi keterangan tempat dalam struktur sintaksis kalimat.",
+          "Kata 'seraya' menandai hubungan kausalitas (sebab-akibat) antara peristiwa pertama dan kedua."
+        ],
+        correct: ["Benar", "Benar", "Benar", "Salah"],
+        expl: "'Seraya' adalah konjungsi kewaktuan bersamaan (simultan), bukan kausalitas. 'Memimpin' & 'melintasi' adalah verba material aksi."
       },
       {
         id: 32, type: 'benar_salah', weight: 10,
         img: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600",
-        q: "Teks Rekon Laporan Belajar:\n\"Pagi kemarin, ruang kelas 9-H tampak dipenuhi antusiasme saat para siswa mempresentasikan teks rekon sejarah di depan kelas secara bergantian.\"\nPernyataan Analisis:\nKutipan teks di atas telah memenuhi unsur kelengkapan orientasi dasar karena memuat penanda waktu ('Pagi kemarin'), tempat ('ruang kelas 9-H'), pihak yang terlibat ('para siswa'), dan aktivitas yang dilakukan.",
-        statements: ["Analisis Kelengkapan Unsur Orientasi pada Teks Rekon Laporan Belajar"],
-        correct: ["Benar"],
-        expl: "Orientasi teks lengkap memuat keterangan waktu, tempat, partisipan/pelaku, dan gambaran awal kegiatan."
+        q: "Teks Rekon Laporan Belajar:\n\"Pagi kemarin, ruang kelas 9-H tampak dipenuhi antusiasme saat para siswa mempresentasikan teks rekon sejarah di depan kelas secara bergantian. Suasana menjadi riuh ketika kelompok pertama menampilkan dokumentasi foto perjuangan lokal.\"\n\nEvaluasilah kelengkapan unsur orientasi dan kaidah teks rekon di atas! Tentukan apakah pernyataan berikut Benar atau Salah!",
+        statements: [
+          "Kutipan di atas memenuhi unsur orientasi lengkap karena memuat penanda waktu ('Pagi kemarin') dan tempat ('ruang kelas 9-H').",
+          "Unsur partisipan/pelaku yang terlibat disajikan secara jelas melalui penanda 'para siswa' dan 'kelompok pertama'.",
+          "Teks tersebut tergolong jenis rekon imajinatif fiksi spekulatif karena berlatar di ruang kelas.",
+          "Kata 'dipenuhi' dan 'menampilkan' merupakan bentuk kata kerja pasif dan aktif yang mendukung deskripsi kegiatan."
+        ],
+        correct: ["Benar", "Benar", "Salah", "Benar"],
+        expl: "Teks berjenis rekon pribadi/laporan kegiatan nyata dengan unsur orientasi (kapan, di mana, siapa, apa) yang lengkap."
       },
       {
         id: 33, type: 'benar_salah', weight: 10,
-        q: "Penulisan kalimat 'Pada tahun 1945, soekarno dan hatta memproklamirkan kemerdekaan indonesia di jakarta' sudah sepenuhnya sesuai dengan kaidah EYD V.",
-        statements: ["Kesesuaian Ejaan Nama Tokoh, Geografi, dan Bentuk Kata Baku EYD V"],
-        correct: ["Salah"],
-        expl: "Salah, nama tokoh dan nama geografi wajib berhuruf kapital: Soekarno, Hatta, Indonesia, Jakarta, serta bentuk baku 'memproklamasikan'."
+        q: "Perhatikan penulisan kalimat rekon berikut!\n\"Pada tahun 1945, soekarno dan hatta memproklamirkan kemerdekaan indonesia di jakarta setelah penyusunan naskah proklamasi selesai.\"\nCermatilah analisis kaidah ejaan EYD V pada kalimat tersebut! Tentukan Benar atau Salah untuk setiap pernyataan!",
+        statements: [
+          "Penulisan nama tokoh 'soekarno dan hatta' seharusnya ditulis menggunakan huruf kapital 'Soekarno dan Hatta'.",
+          "Penulisan nama diri geografi 'indonesia' dan 'jakarta' sudah tepat menggunakan huruf kecil karena berada di tengah kalimat.",
+          "Bentuk kata 'memproklamirkan' merupakan bentuk tidak baku; bentuk baku yang tepat menurut EYD adalah 'memproklamasikan'.",
+          "Penggunaan tanda koma setelah keterangan waktu 'Pada tahun 1945' di awal kalimat sudah sesuai kaidah penulisan aposisi/keterangan anak kalimat."
+        ],
+        correct: ["Benar", "Salah", "Benar", "Benar"],
+        expl: "Nama tokoh dan nama geografi wajib berawal kapital. Bentuk baku kata berimbuhan tersebut adalah 'memproklamasikan'."
       },
       {
         id: 34, type: 'benar_salah', weight: 10,
-        q: "Konjungsi intrakalimat 'sebelum' dan 'sesudah' berfungsi untuk menghubungkan klausa yang memiliki relasi temporal (urutan waktu peristiwa).",
-        statements: ["Fungsi Konjungsi Intrakalimat Temporal Dalam Menghubungkan Antarklausa"],
-        correct: ["Benar"],
-        expl: "'Sebelum' dan 'sesudah' merupakan konjungsi subordinatif waktu yang menandai hubungan temporal antarklausa."
+        q: "Analisis penggunaan kata penghubung (konjungsi) dalam struktur kalimat teks rekon! Tentukan apakah pernyataan berikut Benar atau Salah!",
+        statements: [
+          "Konjungsi 'sebelum' dan 'sesudah' berfungsi menandai keterkaitan kronologi urutan waktu (temporal).",
+          "Konjungsi 'oleh karena itu' digunakan untuk menghubungkan dua klausa yang berlawanan makna (konsesif).",
+          "Kata 'sejak' dan 'sewaktu' dapat digunakan sebagai penanda waktu awal dimulainya suatu peristiwa dalam rekon.",
+          "Konjungsi 'sehingga' menandai hubungan akibat dari peristiwa yang dijelaskan pada klausa sebelumnya."
+        ],
+        correct: ["Benar", "Salah", "Benar", "Benar"],
+        expl: "'Oleh karena itu' adalah konjungsi kausalitas/simpulan, bukan pertentangan (konsesif)."
       },
       {
         id: 35, type: 'menjodohkan', weight: 20,
@@ -780,14 +810,30 @@
         expl: "Teks rekon faktual (factual recount) didasarkan pada kejadian nyata dan data fakta yang dapat diverifikasi."
       },
       {
-        id: 39, type: 'uraian', weight: 20,
-        q: "Jelaskan tiga struktur pembangun teks rekon (orientasi, rekaman peristiwa, dan reorientasi) beserta fungsi masing-masing bagian dalam membentuk keutuhan naskah!",
-        expl: "Rubrik Penskoran Guru:\n1. Orientasi: Mengenalkan latar belakang peristiwa, tokoh yang terlibat, serta waktu dan tempat kejadian.\n2. Rekaman Peristiwa (Events): Menyajikan rangkaian kejadian secara runtut dan kronologis.\n3. Reorientasi: Memuat simpulan, komentar pribadi, atau refleksi penutup penulis (opsional)."
+        id: 39, type: 'benar_salah', weight: 20,
+        q: "Cermatilah perbedaan fungsi dari tiga struktur pembangun teks rekon (Orientasi, Rekaman Peristiwa, dan Reorientasi)! Tentukan Benar atau Salah untuk setiap pernyataan fungsi berikut!",
+        statements: [
+          "Orientasi berfungsi mengenalkan latar belakang peristiwa, tokoh yang terlibat, serta keterangan waktu dan tempat kejadian.",
+          "Rekaman Peristiwa (Record of Events) menyajikan alur kejadian secara runtut, terstruktur, dan kronologis dari awal hingga akhir.",
+          "Reorientasi berisi klimaks konflik utama yang menyebabkan para tokoh saling bertengkar di akhir cerita.",
+          "Reorientasi memberikan ruang bagi penulis untuk menyampaikan pendapat, nilai moral, atau refleksi pribadi atas peristiwa yang dialami.",
+          "Struktur teks rekon bersifat acak sehingga bagian Rekaman Peristiwa boleh diletakkan sebelum bagian Orientasi."
+        ],
+        correct: ["Benar", "Benar", "Salah", "Benar", "Salah"],
+        expl: "Reorientasi berisi refleksi/simpulan penutup, bukan komplikasi/klimaks konflik. Struktur teks rekon harus runtut."
       },
       {
-        id: 40, type: 'uraian', weight: 20,
-        q: "Perhatikan data peristiwa acak berikut!\n- Pukul 08.00 WIB: Siswa berkumpul di lapangan sekolah mengikuti pembukaan pekan olahraga.\n- Pukul 15.00 WIB: Penyerahan piala dan penutupan kegiatan oleh kepala sekolah.\n- Pukul 09.30 WIB: Pertandingan futsal dan bola voli antarkelas dimulai serentak.\nSusunlah data peristiwa acak tersebut menjadi sebuah paragraf teks rekon yang padu dengan menggunakan konjungsi temporal dan kalimat yang efektif!",
-        expl: "Contoh jawaban siswa yang tepat: 'Pada pukul 08.00 WIB, seluruh siswa berkumpul di lapangan sekolah untuk mengikuti pembukaan pekan olahraga dengan khidmat. Setelah upacara selesai, tepat pada pukul 09.30 WIB pertandingan futsal dan bola voli antarkelas dimulai serentak dengan penuh semangat. Akhirnya, rangkaian kegiatan tersebut diakhiri pada pukul 15.00 WIB dengan acara penyerahan piala serta penutupan resmi oleh kepala sekolah.'"
+        id: 40, type: 'benar_salah', weight: 20,
+        q: "Perhatikan Data Peristiwa Acak:\n- Data A: Pukul 08.00 WIB: Siswa berkumpul di lapangan sekolah mengikuti pembukaan pekan olahraga.\n- Data B: Pukul 15.00 WIB: Penyerahan piala dan penutupan kegiatan oleh kepala sekolah.\n- Data C: Pukul 09.30 WIB: Pertandingan futsal dan bola voli antarkelas dimulai serentak.\n\nAnalisis susunan kronologis dan kepaduan narasi teks rekon berdasarkan data di atas! Tentukan apakah pernyataan berikut Benar atau Salah!",
+        statements: [
+          "Urutan kronologis peristiwa yang logis dan runtut berdasarkan waktu kejadian adalah Data A ➔ Data C ➔ Data B.",
+          "Kalimat penghubung 'Setelah pembukaan selesai pada pukul 09.30 WIB, pertandingan futsal dimulai' tepat digunakan untuk menjembatani Data A dan C.",
+          "Peristiwa penutupan pada Data B (pukul 15.00 WIB) seharusnya diletakkan di awal paragraf sebagai bagian orientasi pengantar.",
+          "Penggunaan kata transisi 'Akhirnya' atau 'Sebagai penutup' cocok ditempatkan pada kalimat yang menyajikan Data B.",
+          "Mengubah urutan menjadi Data B ➔ Data A ➔ Data C tetap menghasilkan teks rekon yang padu dan logis."
+        ],
+        correct: ["Benar", "Benar", "Salah", "Benar", "Salah"],
+        expl: "Urutan waktu logis adalah 08.00 (buka) ➔ 09.30 (lomba) ➔ 15.00 (tutup). Penutupan di akhir menggunakan konjungsi penyimpul."
       }
     ];
 
@@ -943,10 +989,10 @@
         table.innerHTML = `
           <thead>
             <tr>
-              <th>No</th>
+              <th style="width: 50px;">No</th>
               <th>Pernyataan Analisis</th>
-              <th>Benar</th>
-              <th>Salah</th>
+              <th style="width: 80px; text-align:center;">Benar</th>
+              <th style="width: 80px; text-align:center;">Salah</th>
             </tr>
           </thead>
           <tbody>
@@ -1111,7 +1157,6 @@
         } else if (q.type === 'uraian') {
           const ansText = (userAnswers[idx] || "").trim();
           if (ansText.length > 0) answeredCount++;
-          // Untuk Uraian Otomatis Mengisi 80% Estimasi Awal Sebelum Dikoreksi Pengawas
           if (ansText.length > 15) earnedPoints += Math.round(q.weight * 0.8);
         }
       });
