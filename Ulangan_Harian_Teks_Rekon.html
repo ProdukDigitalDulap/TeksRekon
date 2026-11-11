@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ulangan Harian CBT - Teks Rekon Kelas 9 (Kurikulum Merdeka)</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --danger: #dc2626;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
+    
+    header {
+      background: white;
+      border-bottom: 2px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .tabs { display: flex; gap: 8px; }
+    .tab-btn {
+      padding: 8px 18px;
+      border: 1px solid var(--border);
+      background: #f1f5f9;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    .timer-badge {
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .cheat-badge {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .container { max-width: 1200px; margin: 20px auto; padding: 0 16px; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+    }
+
+    .login-box { max-width: 480px; margin: 40px auto; }
+    .form-group { margin-bottom: 16px; text-align: left; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 15px;
+      outline: none;
+      background: white;
+    }
+    .form-control:focus { border-color: var(--primary); }
+
+    .exam-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 20px;
+    }
+    @media(max-width: 900px) {
+      .exam-grid { grid-template-columns: 1fr; }
+    }
+    .student-badge-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e40af;
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+    .cbt-image {
+      max-width: 100%;
+      height: auto;
+      max-height: 320px;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+      object-fit: cover;
+      display: block;
+    }
+    .question-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+    .options-group { display: flex; flex-direction: column; gap: 10px; }
+    .option-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .option-label:hover { background: #f1f5f9; }
+    .option-label input { margin-top: 4px; }
+
+    .matrix-table, .matching-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    .matrix-table th, .matrix-table td, .matching-table th, .matching-table td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      text-align: left;
+    }
+    .matrix-table th, .matching-table th { background: #f1f5f9; font-weight: 600; text-align: center; }
+    .matrix-table td.center { text-align: center; width: 70px; }
+
+    .btn-nav-row { display: flex; justify-content: space-between; margin-top: 24px; }
+    .btn {
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { background: #f8fafc; }
+    .btn-danger { background: var(--danger); color: white; }
+
+    .number-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 12px; }
+    .num-btn {
+      padding: 10px 0;
+      text-align: center;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .num-btn.answered { background: var(--primary); color: white; border-color: var(--primary); }
+    .num-btn.current { border: 2px solid #000; }
+
+    .auth-box { max-width: 450px; margin: 40px auto; text-align: center; padding: 30px; }
+    .expl-item { border-bottom: 1px solid var(--border); padding: 16px 0; }
+    .expl-item:last-child { border-bottom: none; }
+    .badge-key {
+      display: inline-block;
+      background: #dcfce7;
+      color: #15803d;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: bold;
+      margin-left: 6px;
+    }
+    
+    /* MODAL PERINGATAN KECURANGAN */
+    #cheat-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(153, 27, 27, 0.95);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      animation: pulseAlert 0.8s infinite alternate;
+    }
+    @keyframes pulseAlert {
+      0% { background: rgba(153, 27, 27, 0.92); }
+      100% { background: rgba(220, 38, 38, 0.98); }
+    }
+    .modal-content-cheat {
+      background: #111827;
+      border: 3px solid #ef4444;
+      color: white;
+      padding: 32px 24px;
+      border-radius: 12px;
+      max-width: 460px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+    }
+
+    /* MODAL HASIL BADGE HASIL UJIAN */
+    #result-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(4px);
+      z-index: 8888;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+    .modal-content-result {
+      background: white;
+      border-radius: 16px;
+      max-width: 550px;
+      width: 100%;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    }
+    .score-badge-circle {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: 20px auto;
+      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.35);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <h3 style="font-size: 18px; font-weight: 700;">Ulangan Harian CBT</h3>
+      <span style="font-size: 12px; color: #64748b;">Topik: Teks Rekon - SMPN 28 Bandung</span>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('exam', this)">Lembar Ujian</button>
+      <button class="tab-btn" onclick="switchTab('solutions', this)">🔒 Kunci & Pembahasan</button>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <div class="cheat-badge" id="cheat-badge-display">Peringatan: 0</div>
+      <div class="timer-badge" id="timer">Waktu: 70:00</div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- TAB 1: UJIAN -->
+    <div id="exam-tab" class="tab-content active">
+
+      <!-- FORM IDENTITAS PESERTA -->
+      <div id="start-screen" class="card login-box">
+        <h3 style="margin-bottom: 6px; text-align: center;">Identitas Peserta Ujian</h3>
+        <p style="font-size: 14px; color: #64748b; margin-bottom: 20px; text-align: center;">Ulangan Harian Teks Rekon Kelas 9 (Durasi 70 Menit)</p>
+        
+        <div class="form-group">
+          <label for="student-name">Nama Lengkap Siswa</label>
+          <input type="text" id="student-name" class="form-control" placeholder="Contoh: Ahmad Fadilah" autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label for="student-class">Kelas</label>
+          <select id="student-class" class="form-control">
+            <option value="">-- Pilih Kelas --</option>
+            <option value="9A">Kelas 9A</option>
+            <option value="9B">Kelas 9B</option>
+            <option value="9C">Kelas 9C</option>
+            <option value="9D">Kelas 9D</option>
+            <option value="9E">Kelas 9E</option>
+            <option value="9F">Kelas 9F</option>
+            <option value="9G">Kelas 9G</option>
+            <option value="9H">Kelas 9H</option>
+            <option value="9I">Kelas 9I</option>
+            <option value="9J">Kelas 9J</option>
+          </select>
+        </div>
+
+        <p id="start-error" style="color: red; font-size: 13px; margin-bottom: 12px; display: none;">Harap isi nama dan pilih kelas terlebih dahulu!</p>
+
+        <button class="btn btn-primary" style="width: 100%;" onclick="startExamSession()">Mulai Pengerjaan Ujian</button>
+      </div>
+
+      <!-- LEMBAR SOAL UJIAN -->
+      <div id="exam-screen" style="display: none;">
+        <div class="student-badge-bar">
+          <div><strong>Nama:</strong> <span id="badge-name">-</span> | <strong>Kelas:</strong> <span id="badge-class">-</span></div>
+          <div><strong style="color: #b91c1c;">Deteksi Berpindah Layar: <span id="badge-cheat">0</span> Kali</strong></div>
+        </div>
+
+        <div class="exam-grid">
+          <div>
+            <div class="card">
+              <div id="media-area"></div>
+              <div id="question-area">
+                <div class="question-title" id="q-text"></div>
+                <div id="q-options"></div>
+              </div>
+              <div class="btn-nav-row">
+                <button class="btn btn-outline" id="prev-btn" onclick="prevQuestion()">Sebelumnya</button>
+                <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()">Berikutnya</button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="card">
+              <h4 style="margin-bottom: 8px;">Daftar Nomor Soal</h4>
+              <div class="number-grid" id="number-palette"></div>
+              <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--border);">
+              <button class="btn btn-primary" style="width: 100%;" onclick="submitExam()">Selesai & Kumpulkan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB 2: PEMBAHASAN -->
+    <div id="solutions-tab" class="tab-content">
+      <!-- Layar Terkunci -->
+      <div id="lock-screen" class="card auth-box">
+        <h3 style="margin-bottom: 8px;">Area Khusus Pengawas/Guru</h3>
+        <p style="font-size: 14px; color: #64748b;">Masukkan kode pengawas untuk membuka kunci pembahasan.</p>
+        <div class="form-group" style="margin-top: 16px;">
+          <input type="password" id="pass-input" class="form-control" placeholder="Masukkan password pengawas">
+        </div>
+        <button class="btn btn-primary" style="width: 100%;" onclick="unlockSolutions()">Buka Kunci</button>
+        <p id="lock-msg" style="color: red; margin-top: 10px; font-size: 13px;"></p>
+      </div>
+
+      <!-- Layar Kunci Terbuka -->
+      <div id="unlocked-screen" style="display: none;">
+        <div class="card">
+          <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+            <h3>Kunci Jawaban dan Pembahasan Lengkap</h3>
+            <button class="btn btn-danger" onclick="lockAgain()">Kunci Kembali</button>
+          </div>
+          <div id="solutions-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Peringatan Kecurangan -->
+  <div id="cheat-modal">
+    <div class="modal-content-cheat">
+      <h1 style="font-size: 48px; margin-bottom: 10px;">🚨 WARNING 🚨</h1>
+      <h3 style="color: #ef4444; margin-bottom: 12px; font-size: 20px;">PELANGGARAN UJIAN TERDETEKSI!</h3>
+      <p style="font-size: 15px; line-height: 1.5; color: #d1d5db; margin-bottom: 20px;">
+        Anda terdeteksi **meninggalkan layar/tab ujian**. Tindakan ini dicatat sebagai indikasi kecurangan dan telah terekam oleh sistem pengawas!
+      </p>
+      <button class="btn btn-danger" style="width: 100%; padding: 12px; font-size: 16px;" onclick="closeCheatModal()">SAYA BERJANJI TIDAK MENGULANGI</button>
+    </div>
+  </div>
+
+  <!-- Modal Hasil Ujian -->
+  <div id="result-modal">
+    <div class="modal-content-result">
+      <h2 style="color: #1e293b; margin-bottom: 4px;">Hasil Ulangan Harian Teks Rekon</h2>
+      <p style="font-size: 14px; color: #64748b;" id="res-student-info">Ahmad Fadilah (Kelas 9A)</p>
+
+      <div class="score-badge-circle">
+        <span style="font-size: 12px; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px;">Skor Akhir</span>
+        <span style="font-size: 38px; font-weight: 800;" id="res-score-val">0</span>
+      </div>
+
+      <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 20px; text-align: left; font-size: 14px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span>Status Pengerjaan:</span>
+          <strong style="color: var(--success);" id="res-status-str">Selesai Dikumpulkan</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span>Pelanggaran Layar (Pindah Tab):</span>
+          <strong style="color: var(--danger);" id="res-cheat-val">0 Kali</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span>Waktu Pengumpulkan:</span>
+          <strong id="res-time-val">-</strong>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 15px;" onclick="resetToLoginScreen()">Kembali ke Halaman Utama</button>
+    </div>
+  </div>
+
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwnofvUTdgYI3gkdqpv2DuOdV7rnljX3LwjioudywFJ78NB2A8AJobhMM7AqnxVK4mW/exec";
+    const SECRET_CODE = "MGMPBINDO";
+
+    let currentStudent = { name: "", class: "" };
+    let cheatCount = 0;
+    let examStarted = false;
+    let examSubmitted = false;
+    let timerInterval = null;
+
+    // Web Audio Synthesizer Alarm Suara Keras
+    function playAlarmSound() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.4);
+        
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+        
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        
+        osc.start();
+        osc.stop(ctx.currentTime + 0.4);
+      } catch (e) {
+        console.log("Audio alert blocked");
+      }
+    }
+
+    // Monitor Visibility Pindah Tab
+    document.addEventListener("visibilitychange", function() {
+      if (examStarted && !examSubmitted && document.hidden) {
+        cheatCount++;
+        document.getElementById("badge-cheat").textContent = cheatCount;
+        document.getElementById("cheat-badge-display").textContent = `Peringatan: ${cheatCount}`;
+        document.getElementById("cheat-modal").style.display = "flex";
+        playAlarmSound();
+      }
+    });
+
+    function closeCheatModal() {
+      document.getElementById("cheat-modal").style.display = "none";
+    }
+
+    // MASTER DATABASE SOAL (BERDASARKAN TEMPLATE DOCX)
+    const questionsMaster = [
+      {
+        id: 1, type: 'pilihan_ganda', weight: 10,
+        img: "https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=600",
+        q: "Perhatikan kutipan teks berikut!\n\"Pada tanggal 24 Maret 1946, sekitar 200.000 penduduk Bandung membakar kediaman mereka sendiri dalam peristiwa heroik Bandung Lautan Api. Dalam waktu tujuh jam, asap hitam pekat mengepul tinggi membakar kawasan selatan Bandung demi mencegah tentara Sekutu dan NICA menggunakan kota ini sebagai markas strategis militer.\"\nBerdasarkan ciri faktual dan tujuannya, kutipan teks rekon di atas tergolong ke dalam jenis...",
+        opts: ["Rekon pribadi (personal recount)", "Rekon faktual / sejarah (factual recount)", "Rekon imajinatif (imaginative recount)", "Rekon fiksi spekulatif"],
+        correct: 1,
+        expl: "Teks merekam peristiwa sejarah nyata yang berbasis data waktu, tempat, dan fakta objektif."
+      },
+      {
+        id: 2, type: 'pilihan_ganda', weight: 10,
+        q: "Bacalah teks rekon pribadi berikut!\n\"Hari Minggu lalu, aku mengikuti kegiatan bakti sosial di panti asuhan bersama teman-teman OSIS. Sejak pagi kami telah berkumpul di aula sekolah untuk memilah pakaian layak pakai dan buku-buku bacaan. Pengalaman ini benar-benar membuka mata batinku tentang arti bersyukur dan berbagi.\"\nBagian teks 'Pengalaman ini benar-benar membuka mata batinku tentang arti bersyukur dan berbagi' menempati struktur...",
+        opts: ["Orientasi (Orientation)", "Urutan Peristiwa (Record of Events)", "Reorientasi (Reorientation)", "Komplikasi (Complication)"],
+        correct: 2,
+        expl: "Reorientasi memuat simpulan, komentar pribadi, atau refleksi kesan akhir penulis atas rangkaian peristiwa yang telah dialami."
+      },
+      {
+        id: 3, type: 'pilihan_ganda', weight: 10,
+        q: "Bacalah kutipan orientasi teks rekon berikut!\n\"Pada tanggal 28 Oktober 1928, para pemuda dari berbagai penjuru Nusantara berkumpul di Jakarta dalam Kongres Pemuda II untuk mengikrarkan Sumpah Pemuda.\"\nInformasi pokok yang disajikan dalam bagian orientasi di atas menjawab pertanyaan adiksimba...",
+        opts: ["Mengapa dan bagaimana", "Kapan, siapa, di mana, dan apa", "Berapa lama dan kepada siapa", "Siapa dan mengapa saja"],
+        correct: 1,
+        expl: "Orientasi menjawab kapan (28 Oktober 1928), siapa (para pemuda), di mana (Jakarta), dan apa (Kongres Pemuda II/Sumpah Pemuda)."
+      },
+      {
+        id: 4, type: 'pilihan_ganda', weight: 10,
+        q: "Bacalah teks rekon imajinatif berikut!\n\"Sejenak setelah kapsul waktuku mendarat di permukaan Mars pada tahun 2150, aku melangkah keluar menyusuri ngarai merah Valles Marineris. Hamparan debu merah berpendar diterangi dua rembulan kecil, Phobos dan Deimos, yang melintas begitu cepat di cakrawala hampa udara.\"\nCiri utama yang membedakan teks di atas dengan teks rekon faktual adalah...",
+        opts: ["Disusun berdasarkan hasil eksperimen ilmiah di laboratorium modern", "Menggunakan data statistik dari lembaga antariksa dunia secara akurat", "Mengembangkan imajinasi khayalan fiksi penulis namun tetap mengikuti alur kronologis peristiwa masa lampau", "Tidak menggunakan keterangan waktu dan kata kerja aksi sama sekali"],
+        correct: 2,
+        expl: "Rekon imajinatif memuat narasi rekaan/khayalan yang disajikan dengan sudut pandang penceritaan peristiwa lampau berurutan."
+      },
+      {
+        id: 5, type: 'pilihan_ganda', weight: 10,
+        q: "Cermatilah kalimat berikut!\n\"Mula-mula rombongan ekspedisi mendirikan tenda di pos 2, setelah itu mereka melanjutkan pendakian menuju puncak saat fajar menyingsing.\"\nKata 'mula-mula' dan 'setelah itu' dalam kalimat di atas berfungsi sebagai...",
+        opts: ["Konjungsi subordinatif syarat", "Konjungsi temporal (urutan waktu)", "Kata kerja mental", "Adverbia tempat dan suasana"],
+        correct: 1,
+        expl: "'Mula-mula' dan 'setelah itu' adalah konjungsi temporal kronologis yang menata urutan waktu peristiwa dalam teks rekon."
+      },
+      {
+        id: 6, type: 'pilihan_ganda', weight: 10,
+        img: "https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=600",
+        q: "Perhatikan kutipan teks rekon sejarah antariksa berikut!\n\"Pada 20 Juli 1969, misi Apollo 11 berhasil mendaratkan modul Lunar Eagle di permukaan Bulan. Neil Armstrong menjejakkan kaki pertama kali di Sea of Tranquility seraya mengucapkan kalimat bersejarah bahwa langkah kecilnya adalah lompatan raksasa bagi umat manusia.\"\nFakta sejarah utama yang disampaikan secara eksplisit dalam teks di atas adalah...",
+        opts: ["Apollo 11 mengalami kegagalan transmisi komunikasi saat memasuki orbit Bulan", "Neil Armstrong menjejakkan kaki pertama kali di Bulan pada 20 Juli 1969", "Pendaratan Bulan ditunda selama dua dekade akibat cuaca antariksa buruk", "Modul Lunar Eagle kembali ke Bumi tanpa membawa batuan sampel Bulan"],
+        correct: 1,
+        expl: "Secara eksplisit teks menegaskan pendaratan Apollo 11 dan langkah pertama Neil Armstrong di Bulan pada 20 Juli 1969."
+      },
+      {
+        id: 7, type: 'pilihan_ganda', weight: 10,
+        q: "Cermatilah kalimat-kalimat berikut!\n1) Rombongan tiba di Museum Geologi pukul 09.00 WIB.\n2) Para siswa mengamati fosil dinosaurus dan batuan purba.\n3) Pukul 07.30 WIB bus sekolah berangkat dari halaman sekolah.\n4) Tepat pukul 12.00 WIB kegiatan kunjungan diakhiri dengan evaluasi bersama.\nUrutan kalimat yang tepat agar membentuk kronologi rekon yang runtut adalah...",
+        opts: ["1) - 3) - 2) - 4)", "3) - 1) - 2) - 4)", "3) - 2) - 1) - 4)", "2) - 3) - 1) - 4)"],
+        correct: 1,
+        expl: "Urutan kronologis logis berdasarkan penanda jam: 07.30 berangkat (3) -> 09.00 tiba (1) -> mengamati (2) -> 12.00 selesai (4)."
+      },
+      {
+        id: 8, type: 'pilihan_ganda', weight: 10,
+        q: "Perhatikan kutipan kalimat dalam teks rekon berikut!\n\"Setelah menempuh perjalanan selama lima jam yang melelahkan, kami merasa sangat lega dan bersyukur dapat tiba di garis finis dengan selamat.\"\nKata yang bergaris bawah 'merasa' dan 'bersyukur' dalam tata bahasa teks rekon termasuk ke dalam kategori...",
+        opts: ["Verba material (tindakan fisik)", "Verba mental (kejiwaan / persepsi rasa)", "Nomina turunan konkret", "Konjungsi kausalitas"],
+        correct: 1,
+        expl: "Verba mental adalah kata kerja yang menyatakan persepsi emosi, pikiran, atau respons kejiwaan (merasa, bersyukur, mengagumi)."
+      },
+      {
+        id: 9, type: 'pilihan_ganda', weight: 10,
+        q: "Bacalah teks rekon berikut!\n\"B.J. Habibie lahir di Parepare pada 25 Juni 1936. Sejak belia, beliau menunjukkan kecerdasan luar biasa dalam bidang sains dan matematika hingga berhasil menempuh studi konstruksi pesawat terbang di RWTH Aachen, Jerman, dengan predikat summa cum laude.\"\nDitinjau dari subjek penceritaannya, teks rekon biografi tokoh bangsa tersebut menggunakan sudut pandang...",
+        opts: ["Orang pertama pelaku utama (aku/saya)", "Orang pertama pelaku sampingan (kami)", "Orang ketiga serbatahu (beliau/dia/nama tokoh)", "Orang kedua jamak (kalian)"],
+        correct: 2,
+        expl: "Biografi menggunakan pronomina orang ketiga (dia/beliau/tokoh) karena penulis menceritakan riwayat tokoh lain secara objektif."
+      },
+      {
+        id: 10, type: 'pilihan_ganda', weight: 10,
+        q: "Cermatilah kalimat berikut!\n\"Relawan palang merah itu dengan sigap membopong korban reruntuhan gempa menuju posko kesehatan lapangan.\"\nKata 'membopong' dalam teks rekon tergolong ke dalam...",
+        opts: ["Kata kerja material (aksi fisik nyata)", "Kata sifat evaluatif", "Kata keterangan modalitas", "Kata penghubung antarparagraf"],
+        correct: 0,
+        expl: "'Membopong' menunjukkan aktivitas fisik nyata yang melibatkan pergerakan jasmani (verba material/aksi)."
+      },
+      {
+        id: 11, type: 'pilihan_ganda', weight: 10,
+        q: "Bacalah kutipan teks berikut!\n\"Setelah proklamasi dibacakan di Pegangsaan Timur No. 56, para wartawan muda segera menyebarkan naskah berita proklamasi melalui kantor berita Domei dan siaran radio ke seluruh pelosok tanah air.\"\nFungsi konjungsi temporal 'setelah' pada kalimat di atas adalah...",
+        opts: ["Menandai hubungan sebab akibat antarperistiwa", "Menandai urutan waktu terjadinya suatu peristiwa yang mendahului peristiwa lain", "Menjelaskan pertentangan antara dua fakta sejarah", "Mengoreksi pernyataan narasumber sebelumnya"],
+        correct: 1,
+        expl: "Konjungsi 'setelah' mengikat urutan waktu bahwa pembacaan proklamasi terjadi lebih dulu sebelum penyebaran berita."
+      },
+      {
+        id: 12, type: 'pilihan_ganda', weight: 10,
+        q: "Perhatikan teks rekon faktual berikut!\n\"Gempa berkekuatan magnitudo 6,8 mengguncang pesisir selatan pada Jumat pagi pukul 06.30 WIB. Badan Penanggulangan Bencana mencatat 45 rumah rusak sedang dan tidak ada korban jiwa yang dilaporkan dalam kejadian tersebut.\"\nUnsur adiksimba yang TIDAK dimuat dalam kutipan teks rekon di atas adalah...",
+        opts: ["Apa yang terjadi", "Kapan peristiwa berlangsung", "Di mana lokasi kejadian", "Bagaimana kronologi langkah mitigasi rekonstruksi rumah warga pascabencana"],
+        correct: 3,
+        expl: "Teks memuat apa (gempa magnitudo 6,8), kapan (Jumat pagi 06.30), dan di mana (pesisir selatan), namun belum memuat rincian mitigasi rekonstruksi (bagaimana)."
+      },
+      {
+        id: 13, type: 'pilihan_ganda', weight: 10,
+        img: "https://images.unsplash.com/photo-1577495508048-b635879837f1?w=600",
+        q: "Perhatikan kutipan catatan perjalanan berikut!\n\"Perjalanan menyusuri hutan tropis pegunungan kemarin memberi kami pelajaran berharga. Jalan setapak yang licin dan tanjakan terjal menguji daya tahan fisik serta kekompakan kelompok. Kami belajar bahwa di alam bebas, ego pribadi harus ditundukkan demi keselamatan bersama.\"\nNilai karakter utama yang dipetik penulis dalam kutipan rekon perjalanan di atas adalah...",
+        opts: ["Persaingan ketat untuk menjadi pendaki paling cepat sampai di puncak", "Kekompakan tim, pengendalian ego, dan kepedulian terhadap keselamatan bersama", "Ketergantungan penuh pada peralatan modern di alam bebas", "Kepasrahan tanpa berusaha ketika menghadapi rintangan"],
+        correct: 1,
+        expl: "Kutipan menegaskan nilai kekompakan kelompok dan menundukkan ego pribadi demi keselamatan bersama."
+      },
+      {
+        id: 14, type: 'pilihan_ganda', weight: 10,
+        q: "Cermatilah kalimat berikut!\n\"Di laboratorium komputer sekolah, para peserta lomba mengetik naskah dengan penuh konsentrasi kemarin siang.\"\nFrasa yang menduduki fungsi keterangan tempat dan keterangan waktu dalam kalimat tersebut adalah...",
+        opts: ["'Di laboratorium komputer sekolah' dan 'kemarin siang'", "'Para peserta lomba' dan 'dengan penuh konsentrasi'", "'Mengetik naskah' dan 'di laboratorium'", "'Dengan penuh konsentrasi' dan 'kemarin siang'"],
+        correct: 0,
+        expl: "'Di laboratorium komputer sekolah' = keterangan tempat; 'kemarin siang' = keterangan waktu."
+      },
+      {
+        id: 15, type: 'pilihan_ganda', weight: 10,
+        q: "Bacalah teks rekon singkat berikut!\n\"Meskipun hujan lebat mengguyur Stadion Gelora Bandung Lautan Api sejak sore hari, wasit tetap meniup peluit tanda dimulainya pertandingan final pada pukul 19.30 WIB.\"\nKonjungsi pertentangan antarklausa yang terdapat pada kalimat di atas adalah...",
+        opts: ["Meskipun", "Sejak", "Pada", "Tanda"],
+        correct: 0,
+        expl: "Kata 'meskipun' adalah konjungsi subordinatif konsesif/pertentangan yang menghubungkan keadaan hujan dengan pertandingan yang tetap dimulai."
+      },
+      {
+        id: 16, type: 'pilihan_ganda', weight: 10,
+        q: "Perhatikan kutipan berikut!\n\"(1) Upacara peringatan Hari Pahlawan di SMP Negeri 28 berlangsung khidmat. (2) Kepala sekolah bertindak sebagai pembina upacara. (3) Beliau menyampaikan amanat mengenai keteladanan para pejuang kemerdekaan. (4) Sungguh suatu momen yang sangat membakar semangat nasionalisme kami.\"\nKalimat yang menyatakan opini / evaluasi pribadi dalam kutipan di atas ditunjukkan oleh nomor...",
+        opts: ["(1)", "(2)", "(3)", "(4)"],
+        correct: 3,
+        expl: "Kalimat (4) memuat tanggapan subjektif/opini penulis ('Sungguh suatu momen yang sangat membakar semangat nasionalisme kami')."
+      },
+      {
+        id: 17, type: 'pilihan_ganda', weight: 10,
+        q: "Cermatilah kalimat berikut!\n\"Siswa kelas sembilan itu mempresentasikan hasil laporan rekon sejarah lokalnya dihadapan teman sekelas pada hari senen kemarin.\"\nPerbaikan penulisan ejaan yang tepat sesuai kaidah EYD V adalah...",
+        opts: ["Menulis 'dihadapan' menjadi 'di hadapan' dan 'senen' menjadi 'Senin'", "Menulis 'laporannya' menjadi 'lapuran' dan 'kelas' menjadi 'Kls'", "Menulis 'sejarah lokalnya' dengan huruf kapital semua", "Menghilangkan kata 'pada' dan mengubah 'mempresentasikan' menjadi 'mempersentasikan'"],
+        correct: 0,
+        expl: "'di hadapan' dipisah karena 'di' adalah kata depan; nama hari baku berawalan kapital 'Senin'."
+      },
+      {
+        id: 18, type: 'pilihan_ganda', weight: 10,
+        img: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600",
+        q: "Bacalah teks rekon laporan kegiatan lingkungan berikut!\n\"Dalam aksi penanaman seribu pohon mangrove di pesisir utara Sabtu lalu, tim pramuka kami bertugas menanam bibit di zona berlumpur. Sebelum bibit ditancapkan, kami mengikat bambu penyangga agar tanaman tidak roboh tersapu ombak pasang.\"\nBerdasarkan teks di atas, tindakan antisipasi yang dilakukan relawan sebelum menancapkan bibit mangrove adalah...",
+        opts: ["Memberi pupuk kimia dalam jumlah besar", "Mengikat bambu penyangga agar tanaman tidak roboh tersapu ombak pasang", "Mengeringkan seluruh lumpur di area pantai", "Memindahkan bibit ke pot plastik tertutup"],
+        correct: 1,
+        expl: "Tersurat jelas: 'Sebelum bibit ditancapkan, kami mengikat bambu penyangga agar tanaman tidak roboh tersapu ombak pasang.'"
+      },
+      {
+        id: 19, type: 'pilihan_ganda', weight: 10,
+        q: "Perhatikan kutipan teks rekon berikut!\n\"Laksamana Maeda mempersilakan para pemimpin bangsa menggunakan kediamannya untuk merumuskan naskah proklamasi karena beliau menjamin keamanan fisik mereka dari ancaman angkatan darat Jepang (Rikugun).\"\nPernyataan yang merupakan hubungan sebab-akibat (kausalitas) dalam teks di atas adalah...",
+        opts: ["Penyusunan proklamasi dipindahkan ke lapangan ikada karena rumah Maeda bocor", "Rumah Maeda digunakan para tokoh bangsa karena adanya jaminan keamanan fisik dari beliau", "Naskah proklamasi batal diketik akibat intervensi angkatan laut Jepang", "Rikugun menyetujui seluruh isi rumusan teks proklamasi tanpa syarat"],
+        correct: 1,
+        expl: "Kata 'karena' menandai alasan mengapa rumah Maeda digunakan, yakni jaminan keamanan dari ancaman Rikugun."
+      },
+      {
+        id: 20, type: 'pilihan_ganda', weight: 10,
+        q: "Bacalah teks rekon berikut!\n\"Ki Hajar Dewantara mendirikan Perguruan Taman Siswa pada 3 Juli 1922 di Yogyakarta. Lembaga ini memberikan kesempatan pendidikan bagi kaum pribumi jelata yang saat itu didiskriminasi oleh sistem sekolah kolonial Belanda.\"\nTujuan sosial didirikannya Taman Siswa berdasarkan teks rekon tersebut adalah...",
+        opts: ["Membantu pemerintah kolonial memungut pajak pendidikan dari rakyat jelata", "Membuka akses pendidikan bagi kaum pribumi yang terpinggirkan dari diskriminasi kolonial", "Melatih para pemuda menjadi serdadu militer bayaran di Eropa", "Mewajibkan seluruh siswa menggunakan bahasa Belanda dalam percakapan sehari-hari"],
+        correct: 1,
+        expl: "Teks menyatakan Taman Siswa memberikan kesempatan belajar bagi kaum pribumi yang didiskriminasi penjajah."
+      },
+      {
+        id: 21, type: 'pg_kompleks', weight: 15,
+        q: "Bacalah kutipan teks rekon sejarah berikut!\n\"Konferensi Asia Afrika (KAA) yang diselenggarakan di Gedung Merdeka Bandung pada 18-24 April 1955 mencatatkan sejarah diplomasi emas Indonesia. Konferensi ini dihadiri oleh perwakilan dari 29 negara yang sepakat menyuarakan Dasasila Bandung demi perdamaian dunia dan antikolonialisme.\"\nBerdasarkan teks di atas, manakah pernyataan-pernyataan yang SESUAI? (Jawaban benar lebih dari satu)",
+        opts: [
+          "KAA berlangsung di Gedung Merdeka Bandung pada bulan April 1955.",
+          "Konferensi tersebut dihadiri oleh utusan dari 29 negara di kawasan Asia dan Afrika.",
+          "Hasil monumental dari pertemuan tersebut adalah tercetusnya Dasasila Bandung.",
+          "KAA diselenggarakan untuk membentuk aliansi militer penakluk benua Eropa."
+        ],
+        correct: [0, 1, 2],
+        expl: "Pernyataan A, B, dan C didukung bukti tersurat teks. Pernyataan D salah karena tujuannya perdamaian dunia, bukan aliansi militer."
+      },
+      {
+        id: 22, type: 'pg_kompleks', weight: 15,
+        img: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=600",
+        q: "Perhatikan kutipan teks rekon kegiatan literasi perpustakaan berikut!\n\"Senin lalu, kami menyelenggarakan Festival Literasi di perpustakaan sekolah. Para siswa membedah novel sejarah, menulis resensi mini, dan memajang pohon literasi di aula. Kegiatan diakhiri dengan pemberian apresiasi bagi peminjam buku teraktif selama semester gasal.\"\nManakah bentuk aktivitas yang DILAKSANAKAN dalam festival tersebut? (Jawaban benar lebih dari satu)",
+        opts: [
+          "Membedah karya novel sejarah bersama kawan",
+          "Menulis resensi mini dan menempelkannya di pohon literasi",
+          "Memberikan apresiasi penghargaan bagi peminjam buku teraktif",
+          "Menjual buku pelajaran wajib kurikulum lama dengan harga mahal"
+        ],
+        correct: [0, 1, 2],
+        expl: "A, B, dan C tercantum jelas sebagai rangkaian kegiatan Festival Literasi di perpustakaan."
+      },
+      {
+        id: 23, type: 'pg_kompleks', weight: 15,
+        q: "Perhatikan teks rekon pengalaman pribadi berikut!\n\"Saat mengikuti perkemahan Sabtu-Minggu (Persami), regu Rajawali berhasil menyelesaikan penjelajahan halang rintang di hutan pinus. Kami saling bantu melewati jembatan tali gantung dan menyeberangi parit berbatu tanpa ada satu anggota pun yang tertinggal.\"\nManakah kata kerja aksi (verba material) yang terdapat pada kutipan teks di atas? (Jawaban benar lebih dari satu)",
+        opts: [
+          "Menyelesaikan",
+          "Melewati",
+          "Menyeberangi",
+          "Bahagia"
+        ],
+        correct: [0, 1, 2],
+        expl: "Menyelesaikan, melewati, dan menyeberangi adalah verba material (aksi fisik), sedangkan bahagia adalah adjektiva/keadaan emosi."
+      },
+      {
+        id: 24, type: 'pg_kompleks', weight: 15,
+        q: "Cermatilah karakteristik teks berikut!\nManakah karakteristik yang menjadi ciri khas penanda teks rekon (recount text) dalam Bahasa Indonesia? (Jawaban benar lebih dari satu)",
+        opts: [
+          "Menggunakan keterangan waktu lampau (seperti: kemarin, tahun lalu, pada tanggal)",
+          "Menceritakan alur peristiwa secara berurutan / kronologis",
+          "Didominasi oleh kata kerja aksi (material action verbs)",
+          "Berisi dialog argumentasi debat calon ketua partai politik"
+        ],
+        correct: [0, 1, 2],
+        expl: "Ciri esensial teks rekon mencakup keterangan waktu lampau, urutan peristiwa kronologis, dan penggunaan kata kerja aksi."
+      },
+      {
+        id: 25, type: 'pg_kompleks', weight: 15,
+        q: "Bacalah teks rekon ilmiah faktual berikut!\n\"Pada tahun 1928, ilmuwan Alexander Fleming secara tidak sengaja mengamati jamur Penicillium notatum yang membunuh koloni bakteri staphylococcus pada cawan petri. Temuan fenomenal ini mengantarkan lahirnya antibiotik penisilin pertama di dunia yang telah menyelamatkan jutaan nyawa manusia dari infeksi mematikan.\"\nSimpulan yang BENAR dan didukung oleh teks di atas adalah... (Jawaban benar lebih dari satu)",
+        opts: [
+          "Penisilin ditemukan oleh Alexander Fleming pada tahun 1928.",
+          "Penemuan antibiotik tersebut berawal dari pengamatan jamur pembunuh bakteri di cawan petri.",
+          "Antibiotik penisilin berkontribusi besar menyelamatkan jutaan nyawa dari infeksi bakteri.",
+          "Alexander Fleming menolak mempublikasikan temuannya kepada kalangan kedokteran dunia."
+        ],
+        correct: [0, 1, 2],
+        expl: "A, B, dan C merupakan fakta eksplisit dalam teks penemuan penisilin."
+      },
+      {
+        id: 26, type: 'pg_kompleks', weight: 15,
+        q: "Perhatikan kutipan peristiwa teks rekon berikut!\n\"Seusai upacara bendera, para siswa berhamburan menuju lapangan basket untuk menyaksikan pertandingan ekshibisi antarkelas. Suara sorak-sorai penonton menggema setiap kali bola berhasil menerobos jaring keranjang.\"\nKata-kata yang menunjukkan keterangan penanda tempat pada kutipan tersebut adalah... (Jawaban benar lebih dari satu)",
+        opts: [
+          "Menuju lapangan basket",
+          "Menerobos jaring keranjang",
+          "Seusai upacara bendera",
+          "Di pinggir lapangan"
+        ],
+        correct: [0, 1],
+        expl: "'Menuju lapangan basket' dan 'menerobos jaring keranjang' menunjukkan keterangan arah/tempat terjadinya gerak."
+      },
+      {
+        id: 27, type: 'pg_kompleks', weight: 15,
+        img: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600",
+        q: "Bacalah teks rekon laporan praktikum sains berikut!\n\"Kamis pagi di laboratorium IPA, kelompok kami melakukan pengamatan sel stomata daun adam hawa dengan mikroskop cahaya. Mula-mula kami menyayat epidermis bawah daun setipis mungkin, lalu meletakkannya di atas kaca preparat. Setelah ditetesi air dan ditutup kaca penutup, kami mengatur fokus lensa hingga stomata terlihat sangat jelas.\"\nLangkah kerja prosedural yang terekam dalam teks rekon sains di atas adalah... (Jawaban benar lebih dari satu)",
+        opts: [
+          "Menyayat epidermis bawah daun setipis mungkin",
+          "Meletakkan sayatan di atas kaca preparat dan menetesi air",
+          "Mengatur fokus lensa mikroskop cahaya hingga sel stomata terlihat jelas",
+          "Membakar daun menggunakan pembakar spirtus sampai menjadi abu hitam"
+        ],
+        correct: [0, 1, 2],
+        expl: "Langkah A, B, dan C tersurat dalam teks kronologi praktikum mikroskop."
+      },
+      {
+        id: 28, type: 'pg_kompleks', weight: 15,
+        q: "Cermatilah penggalan kalimat rekon berikut!\n\"Kami merasa sangat bangga ketika kepala sekolah mengumumkan bahwa tim paduan suara sekolah kami meraih medali emas pada ajang festival seni tingkat kota.\"\nManakah kata yang termasuk kata kerja mental (verba mental) dan kata sifat penanda rasa dalam teks di atas? (Jawaban benar lebih dari satu)",
+        opts: [
+          "Merasa",
+          "Bangga",
+          "Mengumumkan",
+          "Meraih"
+        ],
+        correct: [0, 1],
+        expl: "'Merasa' adalah verba mental, 'bangga' adalah adjektiva afektif/perasaan batin. Sedangkan 'mengumumkan' dan 'meraih' adalah verba material."
+      },
+      {
+        id: 29, type: 'benar_salah', weight: 10,
+        q: "Teks rekon faktual (seperti berita sejarah atau laporan ilmiah) menyajikan fakta peristiwa masa lalu secara objektif tanpa memasukkan unsur khayalan rekaan pengarang.",
+        statements: ["Kesesuaian Teks Rekon Faktual dengan Prinsip Keabsahan Data Objek"],
+        correct: ["Benar"],
+        expl: "Teks rekon faktual mengutamakan kebenaran data historis dan keabsahan fakta empiris tanpa rekaan imajinatif."
+      },
+      {
+        id: 30, type: 'benar_salah', weight: 10,
+        q: "Bagian reorientasi dalam struktur teks rekon wajib selalu ada dan tidak boleh ditiadakan sama sekali oleh penulis dalam kondisi apa pun.",
+        statements: ["Sifat Keberadaan Struktur Reorientasi dalam Teks Rekon"],
+        correct: ["Salah"],
+        expl: "Bagian reorientasi bersifat opsional (pilihan manasuka); teks rekon tetap sah dan utuh meskipun reorientasi tidak dihadirkan secara eksplisit."
+      },
+      {
+        id: 31, type: 'benar_salah', weight: 10,
+        q: "Kalimat 'Jenderal Soedirman memimpin perang gerilya dari atas tandu seraya melintasi hutan belantara Jawa' mengandung verba material (kata kerja aksi fisik).",
+        statements: ["Keberadaan Verba Material pada Kalimat Aktivitas Gerilya"],
+        correct: ["Benar"],
+        expl: "'Memimpin' dan 'melintasi' merupakan verba material yang menggambarkan tindakan perbuatan fisik di dunia nyata."
+      },
+      {
+        id: 32, type: 'benar_salah', weight: 10,
+        img: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600",
+        q: "Teks Rekon Laporan Belajar:\n\"Pagi kemarin, ruang kelas 9-H tampak dipenuhi antusiasme saat para siswa mempresentasikan teks rekon sejarah di depan kelas secara bergantian.\"\nPernyataan Analisis:\nKutipan teks di atas telah memenuhi unsur kelengkapan orientasi dasar karena memuat penanda waktu ('Pagi kemarin'), tempat ('ruang kelas 9-H'), pihak yang terlibat ('para siswa'), dan aktivitas yang dilakukan.",
+        statements: ["Analisis Kelengkapan Unsur Orientasi pada Teks Rekon Laporan Belajar"],
+        correct: ["Benar"],
+        expl: "Orientasi teks lengkap memuat keterangan waktu, tempat, partisipan/pelaku, dan gambaran awal kegiatan."
+      },
+      {
+        id: 33, type: 'benar_salah', weight: 10,
+        q: "Penulisan kalimat 'Pada tahun 1945, soekarno dan hatta memproklamirkan kemerdekaan indonesia di jakarta' sudah sepenuhnya sesuai dengan kaidah EYD V.",
+        statements: ["Kesesuaian Ejaan Nama Tokoh, Geografi, dan Bentuk Kata Baku EYD V"],
+        correct: ["Salah"],
+        expl: "Salah, nama tokoh dan nama geografi wajib berhuruf kapital: Soekarno, Hatta, Indonesia, Jakarta, serta bentuk baku 'memproklamasikan'."
+      },
+      {
+        id: 34, type: 'benar_salah', weight: 10,
+        q: "Konjungsi intrakalimat 'sebelum' dan 'sesudah' berfungsi untuk menghubungkan klausa yang memiliki relasi temporal (urutan waktu peristiwa).",
+        statements: ["Fungsi Konjungsi Intrakalimat Temporal Dalam Menghubungkan Antarklausa"],
+        correct: ["Benar"],
+        expl: "'Sebelum' dan 'sesudah' merupakan konjungsi subordinatif waktu yang menandai hubungan temporal antarklausa."
+      },
+      {
+        id: 35, type: 'menjodohkan', weight: 20,
+        q: "Jodohkan jenis teks rekon pada Kolom Kiri dengan contoh teks/karakteristiknya yang tepat pada Kolom Kanan!",
+        pairs: [
+          { left: "Rekon Pribadi", right: "Catatan harian pengalaman berkemah saat akhir pekan" },
+          { left: "Rekon Faktual", right: "Laporan sejarah peristiwa Perang Puputan Margarana" },
+          { left: "Rekon Imajinatif", right: "Kisah narasi astronot menjelajahi lorong waktu dimensi galaksi" }
+        ],
+        expl: "Rekon Pribadi melibatkan pengalaman sendiri, Faktual berdasarkan rekaman sejarah nyata, Imajinatif berbasis fiksi kreatif naratif."
+      },
+      {
+        id: 36, type: 'menjodohkan', weight: 20,
+        q: "Jodohkan bagian struktur teks rekon pada Kolom Kiri dengan fungsi utamanya pada Kolom Kanan!",
+        pairs: [
+          { left: "Orientasi", right: "Pengenalan tokoh latar waktu dan tempat peristiwa" },
+          { left: "Rangkaian Peristiwa", right: "Penyajian rekaman kejadian secara kronologis berurutan" },
+          { left: "Reorientasi", right: "Pemberian opini kesan simpulan atau refleksi akhir penulis" }
+        ],
+        expl: "Tiga struktur generik teks rekon: Orientasi (pengantar), Rekaman Peristiwa (kronologi inti), Reorientasi (penutup/evaluasi)."
+      },
+      {
+        id: 37, type: 'isian_singkat', weight: 15,
+        q: "Bacalah kalimat berikut!\n\"Sejak pagi hari para relawan membersihkan puing-puing bangunan, kemudian mereka mendistribusikan logistik makanan.\"\nKata penghubung 'kemudian' dalam kalimat di atas termasuk jenis konjungsi...",
+        correct: "temporal",
+        expl: "Kata 'kemudian' adalah konjungsi temporal (waktu/urutan peristiwa)."
+      },
+      {
+        id: 38, type: 'isian_singkat', weight: 15,
+        q: "Teks rekon yang disusun secara objektif berdasarkan rekaman data riil, fakta sejarah, atau laporan eksperimen ilmiah disebut rekon...",
+        correct: "faktual",
+        expl: "Teks rekon faktual (factual recount) didasarkan pada kejadian nyata dan data fakta yang dapat diverifikasi."
+      },
+      {
+        id: 39, type: 'uraian', weight: 20,
+        q: "Jelaskan tiga struktur pembangun teks rekon (orientasi, rekaman peristiwa, dan reorientasi) beserta fungsi masing-masing bagian dalam membentuk keutuhan naskah!",
+        expl: "Rubrik Penskoran Guru:\n1. Orientasi: Mengenalkan latar belakang peristiwa, tokoh yang terlibat, serta waktu dan tempat kejadian.\n2. Rekaman Peristiwa (Events): Menyajikan rangkaian kejadian secara runtut dan kronologis.\n3. Reorientasi: Memuat simpulan, komentar pribadi, atau refleksi penutup penulis (opsional)."
+      },
+      {
+        id: 40, type: 'uraian', weight: 20,
+        q: "Perhatikan data peristiwa acak berikut!\n- Pukul 08.00 WIB: Siswa berkumpul di lapangan sekolah mengikuti pembukaan pekan olahraga.\n- Pukul 15.00 WIB: Penyerahan piala dan penutupan kegiatan oleh kepala sekolah.\n- Pukul 09.30 WIB: Pertandingan futsal dan bola voli antarkelas dimulai serentak.\nSusunlah data peristiwa acak tersebut menjadi sebuah paragraf teks rekon yang padu dengan menggunakan konjungsi temporal dan kalimat yang efektif!",
+        expl: "Contoh jawaban siswa yang tepat: 'Pada pukul 08.00 WIB, seluruh siswa berkumpul di lapangan sekolah untuk mengikuti pembukaan pekan olahraga dengan khidmat. Setelah upacara selesai, tepat pada pukul 09.30 WIB pertandingan futsal dan bola voli antarkelas dimulai serentak dengan penuh semangat. Akhirnya, rangkaian kegiatan tersebut diakhiri pada pukul 15.00 WIB dengan acara penyerahan piala serta penutupan resmi oleh kepala sekolah.'"
+      }
+    ];
+
+    let currentIndex = 0;
+    const userAnswers = {};
+    let shuffledQuestions = [];
+
+    // Algoritma Fisher-Yates Shuffle
+    function shuffleArray(array) {
+      let arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function prepareQuestions() {
+      let questionsShuffled = shuffleArray(questionsMaster);
+
+      shuffledQuestions = questionsShuffled.map(q => {
+        let newQ = { ...q };
+        if (q.type === 'pilihan_ganda' || q.type === 'pg_kompleks') {
+          let indices = q.opts.map((_, i) => i);
+          let shuffledIndices = shuffleArray(indices);
+          
+          newQ.renderedOpts = shuffledIndices.map(i => q.opts[i]);
+          newQ.originalIndices = shuffledIndices; 
+        }
+        return newQ;
+      });
+    }
+
+    function startExamSession() {
+      const name = document.getElementById("student-name").value.trim();
+      const sClass = document.getElementById("student-class").value;
+      const err = document.getElementById("start-error");
+
+      if (!name || !sClass) {
+        err.style.display = "block";
+        return;
+      }
+      err.style.display = "none";
+
+      currentStudent = { name: name, class: sClass };
+      document.getElementById("badge-name").textContent = name;
+      document.getElementById("badge-class").textContent = sClass;
+
+      document.getElementById("start-screen").style.display = "none";
+      document.getElementById("exam-screen").style.display = "block";
+
+      prepareQuestions();
+      renderPalette();
+      loadQuestion(0);
+      startTimer(70 * 60); // 70 Menit
+      examStarted = true;
+    }
+
+    function renderPalette() {
+      const palette = document.getElementById("number-palette");
+      palette.innerHTML = "";
+      shuffledQuestions.forEach((q, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "num-btn";
+        btn.id = `palette-${idx}`;
+        btn.textContent = idx + 1;
+        btn.onclick = () => loadQuestion(idx);
+        palette.appendChild(btn);
+      });
+    }
+
+    function loadQuestion(idx) {
+      currentIndex = idx;
+      const q = shuffledQuestions[idx];
+      
+      const mediaArea = document.getElementById("media-area");
+      mediaArea.innerHTML = "";
+      if (q.img) {
+        const imgEl = document.createElement("img");
+        imgEl.src = q.img;
+        imgEl.className = "cbt-image";
+        imgEl.alt = "Ilustrasi CBT Teks Rekon";
+        mediaArea.appendChild(imgEl);
+      }
+
+      document.getElementById("q-text").innerHTML = `Soal ${idx + 1} (${q.type.replace('_', ' ').toUpperCase()}):<br>${q.q.replace(/\n/g, '<br>')}`;
+
+      const optContainer = document.getElementById("q-options");
+      optContainer.innerHTML = "";
+
+      if (q.type === 'pilihan_ganda') {
+        const labels = ['A', 'B', 'C', 'D'];
+        q.renderedOpts.forEach((optText, rIdx) => {
+          const originalIdx = q.originalIndices[rIdx];
+          const label = document.createElement("label");
+          label.className = "option-label";
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = `opt-${idx}`;
+          input.value = originalIdx;
+          if (userAnswers[idx] === originalIdx) input.checked = true;
+
+          input.onchange = () => {
+            userAnswers[idx] = originalIdx;
+            updatePaletteStatus();
+          };
+
+          const span = document.createElement("span");
+          span.textContent = `${labels[rIdx]}. ${optText}`;
+
+          label.appendChild(input);
+          label.appendChild(span);
+          optContainer.appendChild(label);
+        });
+
+      } else if (q.type === 'pg_kompleks') {
+        const labels = ['A', 'B', 'C', 'D'];
+        if (!userAnswers[idx]) userAnswers[idx] = [];
+
+        q.renderedOpts.forEach((optText, rIdx) => {
+          const originalIdx = q.originalIndices[rIdx];
+          const label = document.createElement("label");
+          label.className = "option-label";
+
+          const input = document.createElement("input");
+          input.type = "checkbox";
+          input.value = originalIdx;
+          if (userAnswers[idx].includes(originalIdx)) input.checked = true;
+
+          input.onchange = () => {
+            if (input.checked) {
+              if (!userAnswers[idx].includes(originalIdx)) userAnswers[idx].push(originalIdx);
+            } else {
+              userAnswers[idx] = userAnswers[idx].filter(i => i !== originalIdx);
+            }
+            updatePaletteStatus();
+          };
+
+          const span = document.createElement("span");
+          span.textContent = `${labels[rIdx]}. ${optText}`;
+
+          label.appendChild(input);
+          label.appendChild(span);
+          optContainer.appendChild(label);
+        });
+
+      } else if (q.type === 'benar_salah') {
+        if (!userAnswers[idx]) userAnswers[idx] = {};
+
+        const table = document.createElement("table");
+        table.className = "matrix-table";
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Pernyataan Analisis</th>
+              <th>Benar</th>
+              <th>Salah</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${q.statements.map((stmt, sIdx) => `
+              <tr>
+                <td style="text-align:center;">${sIdx + 1}</td>
+                <td>${stmt}</td>
+                <td class="center">
+                  <input type="radio" name="stmt-${idx}-${sIdx}" value="Benar" ${userAnswers[idx][sIdx] === 'Benar' ? 'checked' : ''} onchange="saveMatrixAnswer(${idx}, ${sIdx}, 'Benar')">
+                </td>
+                <td class="center">
+                  <input type="radio" name="stmt-${idx}-${sIdx}" value="Salah" ${userAnswers[idx][sIdx] === 'Salah' ? 'checked' : ''} onchange="saveMatrixAnswer(${idx}, ${sIdx}, 'Salah')">
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        `;
+        optContainer.appendChild(table);
+
+      } else if (q.type === 'menjodohkan') {
+        if (!userAnswers[idx]) userAnswers[idx] = {};
+
+        const table = document.createElement("table");
+        table.className = "matching-table";
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th>Pernyataan Kolom Kiri</th>
+              <th>Pasangan Kolom Kanan</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${q.pairs.map((p, pIdx) => `
+              <tr>
+                <td><strong>${p.left}</strong></td>
+                <td>
+                  <select class="form-control" onchange="saveMatchingAnswer(${idx}, ${pIdx}, this.value)">
+                    <option value="">-- Pilih Pasangan --</option>
+                    ${q.pairs.map(optP => `<option value="${optP.right}" ${userAnswers[idx][pIdx] === optP.right ? 'selected' : ''}>${optP.right}</option>`).join('')}
+                  </select>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        `;
+        optContainer.appendChild(table);
+
+      } else if (q.type === 'isian_singkat') {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className = "form-control";
+        input.placeholder = "Ketik kata kunci jawaban Anda di sini...";
+        input.value = userAnswers[idx] || "";
+        input.oninput = (e) => {
+          userAnswers[idx] = e.target.value.trim();
+          updatePaletteStatus();
+        };
+        optContainer.appendChild(input);
+
+      } else if (q.type === 'uraian') {
+        const textarea = document.createElement("textarea");
+        textarea.className = "form-control";
+        textarea.rows = 5;
+        textarea.placeholder = "Ketik jawaban uraian lengkap Anda di sini...";
+        textarea.value = userAnswers[idx] || "";
+        textarea.oninput = (e) => {
+          userAnswers[idx] = e.target.value;
+          updatePaletteStatus();
+        };
+        optContainer.appendChild(textarea);
+      }
+
+      document.getElementById("prev-btn").disabled = (idx === 0);
+      document.getElementById("next-btn").textContent = (idx === shuffledQuestions.length - 1) ? "Selesai" : "Berikutnya";
+      updatePaletteStatus();
+    }
+
+    function saveMatrixAnswer(qIdx, sIdx, val) {
+      if (!userAnswers[qIdx]) userAnswers[qIdx] = {};
+      userAnswers[qIdx][sIdx] = val;
+      updatePaletteStatus();
+    }
+
+    function saveMatchingAnswer(qIdx, pIdx, val) {
+      if (!userAnswers[qIdx]) userAnswers[qIdx] = {};
+      userAnswers[qIdx][pIdx] = val;
+      updatePaletteStatus();
+    }
+
+    function updatePaletteStatus() {
+      shuffledQuestions.forEach((q, idx) => {
+        const btn = document.getElementById(`palette-${idx}`);
+        if (!btn) return;
+        btn.className = "num-btn";
+        
+        let isAnswered = false;
+        if (q.type === 'pilihan_ganda' && userAnswers[idx] !== undefined) isAnswered = true;
+        if (q.type === 'pg_kompleks' && userAnswers[idx] && userAnswers[idx].length > 0) isAnswered = true;
+        if (q.type === 'benar_salah' && userAnswers[idx] && Object.keys(userAnswers[idx]).length === q.statements.length) isAnswered = true;
+        if (q.type === 'menjodohkan' && userAnswers[idx] && Object.keys(userAnswers[idx]).length === q.pairs.length) isAnswered = true;
+        if (q.type === 'isian_singkat' && userAnswers[idx] && userAnswers[idx].length > 0) isAnswered = true;
+        if (q.type === 'uraian' && userAnswers[idx] && userAnswers[idx].length > 0) isAnswered = true;
+
+        if (isAnswered) btn.classList.add("answered");
+        if (idx === currentIndex) btn.classList.add("current");
+      });
+    }
+
+    function prevQuestion() {
+      if (currentIndex > 0) loadQuestion(currentIndex - 1);
+    }
+
+    function nextQuestion() {
+      if (currentIndex < shuffledQuestions.length - 1) {
+        loadQuestion(currentIndex + 1);
+      } else {
+        submitExam();
+      }
+    }
+
+    function submitExam() {
+      let earnedPoints = 0;
+      let maxPoints = 0;
+      let answeredCount = 0;
+
+      shuffledQuestions.forEach((q, idx) => {
+        maxPoints += q.weight;
+
+        if (q.type === 'pilihan_ganda') {
+          if (userAnswers[idx] !== undefined) answeredCount++;
+          if (userAnswers[idx] === q.correct) earnedPoints += q.weight;
+
+        } else if (q.type === 'pg_kompleks') {
+          if (userAnswers[idx] && userAnswers[idx].length > 0) answeredCount++;
+          const ans = userAnswers[idx] || [];
+          const isCorrect = ans.length === q.correct.length && ans.every(val => q.correct.includes(val));
+          if (isCorrect) earnedPoints += q.weight;
+
+        } else if (q.type === 'benar_salah') {
+          const ansObj = userAnswers[idx] || {};
+          if (Object.keys(ansObj).length > 0) answeredCount++;
+          let stmtPoints = 0;
+          q.statements.forEach((_, sIdx) => {
+            if (ansObj[sIdx] === q.correct[sIdx]) stmtPoints += 1;
+          });
+          earnedPoints += Math.round((stmtPoints / q.statements.length) * q.weight);
+
+        } else if (q.type === 'menjodohkan') {
+          const ansObj = userAnswers[idx] || {};
+          if (Object.keys(ansObj).length > 0) answeredCount++;
+          let pairPoints = 0;
+          q.pairs.forEach((p, pIdx) => {
+            if (ansObj[pIdx] === p.right) pairPoints += 1;
+          });
+          earnedPoints += Math.round((pairPoints / q.pairs.length) * q.weight);
+
+        } else if (q.type === 'isian_singkat') {
+          const ansText = (userAnswers[idx] || "").toLowerCase().trim();
+          if (ansText.length > 0) answeredCount++;
+          if (ansText === q.correct.toLowerCase()) earnedPoints += q.weight;
+
+        } else if (q.type === 'uraian') {
+          const ansText = (userAnswers[idx] || "").trim();
+          if (ansText.length > 0) answeredCount++;
+          // Untuk Uraian Otomatis Mengisi 80% Estimasi Awal Sebelum Dikoreksi Pengawas
+          if (ansText.length > 15) earnedPoints += Math.round(q.weight * 0.8);
+        }
+      });
+
+      const confirmSubmit = confirm(`Nama: ${currentStudent.name} (${currentStudent.class})\nTerjawab: ${answeredCount} dari ${shuffledQuestions.length} soal.\nPeringatan Berpindah Tab: ${cheatCount} kali.\nApakah Anda yakin ingin mengumpulkan?`);
+      if (!confirmSubmit) return;
+
+      examSubmitted = true;
+      if (timerInterval) clearInterval(timerInterval);
+
+      const finalScore = Math.round((earnedPoints / maxPoints) * 100);
+      const nowStr = new Date().toLocaleString("id-ID");
+
+      // Tampilkan Badge Hasil Modal
+      document.getElementById("res-student-info").textContent = `${currentStudent.name} (Kelas ${currentStudent.class})`;
+      document.getElementById("res-score-val").textContent = finalScore;
+      document.getElementById("res-cheat-val").textContent = `${cheatCount} Kali`;
+      document.getElementById("res-time-val").textContent = nowStr;
+      document.getElementById("result-modal").style.display = "flex";
+
+      // Kirim Data ke Google Sheets
+      sendResultToGoogleSheet(currentStudent.name, currentStudent.class, finalScore, cheatCount);
+    }
+
+    function resetToLoginScreen() {
+      document.getElementById("result-modal").style.display = "none";
+      document.getElementById("exam-screen").style.display = "none";
+      document.getElementById("start-screen").style.display = "block";
+      
+      document.getElementById("student-name").value = "";
+      document.getElementById("student-class").value = "";
+      document.getElementById("badge-cheat").textContent = "0";
+      document.getElementById("cheat-badge-display").textContent = "Peringatan: 0";
+      document.getElementById("timer").textContent = "Waktu: 70:00";
+      
+      currentStudent = { name: "", class: "" };
+      cheatCount = 0;
+      examStarted = false;
+      examSubmitted = false;
+      for (let member in userAnswers) delete userAnswers[member];
+    }
+
+    function sendResultToGoogleSheet(nama, kelas, nilai, kecurangan) {
+      const payload = {
+        nama: nama,
+        kelas: kelas,
+        nilai: nilai,
+        kecurangan: kecurangan,
+        paket: "UH Teks Rekon Kelas 9",
+        waktu: new Date().toLocaleString("id-ID")
+      };
+
+      fetch(GAS_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(() => {
+        console.log("Data hasil ujian berhasil dikirim ke Google Sheets.");
+      }).catch(err => {
+        console.error("Gagal mengirim ke Google Sheets:", err);
+      });
+    }
+
+    function switchTab(tab, element) {
+      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+      document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+
+      element.classList.add("active");
+      if (tab === 'exam') {
+        document.getElementById("exam-tab").classList.add("active");
+      } else {
+        document.getElementById("solutions-tab").classList.add("active");
+      }
+    }
+
+    function unlockSolutions() {
+      const pass = document.getElementById("pass-input").value;
+      const msg = document.getElementById("lock-msg");
+      if (pass === SECRET_CODE) {
+        document.getElementById("lock-screen").style.display = "none";
+        document.getElementById("unlocked-screen").style.display = "block";
+        document.getElementById("pass-input").value = "";
+        msg.textContent = "";
+        renderSolutions();
+      } else {
+        msg.textContent = "Password salah. Hubungi Pengawas / MGMP BINDO.";
+      }
+    }
+
+    function lockAgain() {
+      document.getElementById("pass-input").value = "";
+      document.getElementById("lock-screen").style.display = "block";
+      document.getElementById("unlocked-screen").style.display = "none";
+    }
+
+    function renderSolutions() {
+      const list = document.getElementById("solutions-list");
+      const optLabels = ['A', 'B', 'C', 'D'];
+      list.innerHTML = "";
+
+      questionsMaster.forEach((q, idx) => {
+        const item = document.createElement("div");
+        item.className = "expl-item";
+
+        let keyText = "";
+        if (q.type === 'pilihan_ganda') {
+          keyText = `<span class="badge-key">${optLabels[q.correct]}</span>`;
+        } else if (q.type === 'pg_kompleks') {
+          keyText = q.correct.map(i => `<span class="badge-key">${optLabels[i]}</span>`).join(" ");
+        } else if (q.type === 'benar_salah') {
+          keyText = `<br><ol style="margin-left:20px;">` + q.correct.map((c, i) => `<li>Pernyataan ${i+1}: <strong>${c}</strong></li>`).join("") + `</ol>`;
+        } else if (q.type === 'menjodohkan') {
+          keyText = `<br><ul style="margin-left:20px;">` + q.pairs.map(p => `<li>${p.left} ➔ <strong>${p.right}</strong></li>`).join("") + `</ul>`;
+        } else if (q.type === 'isian_singkat') {
+          keyText = `<span class="badge-key">${q.correct}</span>`;
+        } else if (q.type === 'uraian') {
+          keyText = `<span class="badge-key">Uraian / Pedoman Penskoran Guru</span>`;
+        }
+
+        item.innerHTML = `
+          <p><strong>Soal ${idx + 1} (${q.type.replace('_', ' ').toUpperCase()}):</strong> ${q.q.replace(/\n/g, '<br>')}</p>
+          <p style="margin: 6px 0;">Kunci Jawaban: ${keyText}</p>
+          <p style="font-size: 14px; color: #475569;"><strong>Pembahasan / Rubrik:</strong> ${q.expl.replace(/\n/g, '<br>')}</p>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function startTimer(duration) {
+      let timer = duration;
+      const display = document.getElementById('timer');
+      if (timerInterval) clearInterval(timerInterval);
+      
+      timerInterval = setInterval(function () {
+        let minutes = parseInt(timer / 60, 10);
+        let seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = `Waktu: ${minutes}:${seconds}`;
+
+        if (--timer < 0) {
+          clearInterval(timerInterval);
+          alert("Waktu pengerjaan telah habis!");
+          submitExam();
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
