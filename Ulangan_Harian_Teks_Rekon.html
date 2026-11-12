@@ -332,7 +332,7 @@
               <h4 style="margin-bottom: 8px;">Daftar Nomor Soal</h4>
               <div class="number-grid" id="number-palette"></div>
               <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--border);">
-              <button class="btn btn-primary" style="width: 100%;" onclick="submitExam()">Selesai & Kumpulkan</button>
+              <button class="btn btn-primary" style="width: 100%;" onclick="submitExam(false)">Selesai & Kumpulkan</button>
             </div>
           </div>
         </div>
@@ -372,7 +372,7 @@
       <h1 style="font-size: 48px; margin-bottom: 10px;">🚨 WARNING 🚨</h1>
       <h3 style="color: #ef4444; margin-bottom: 12px; font-size: 20px;">PELANGGARAN UJIAN TERDETEKSI!</h3>
       <p style="font-size: 15px; line-height: 1.5; color: #d1d5db; margin-bottom: 20px;">
-        Anda terdeteksi **meninggalkan layar/tab ujian**. Tindakan ini dicatat sebagai indikasi kecurangan dan telah terekam oleh sistem pengawas!
+        Anda terdeteksi <strong>meninggalkan layar/tab ujian</strong>. Tindakan ini dicatat sebagai indikasi kecurangan dan telah terekam oleh sistem pengawas!
       </p>
       <button class="btn btn-danger" style="width: 100%; padding: 12px; font-size: 16px;" onclick="closeCheatModal()">SAYA BERJANJI TIDAK MENGULANGI</button>
     </div>
@@ -411,12 +411,72 @@
   <script>
     const GAS_URL = "https://script.google.com/macros/s/AKfycbwnofvUTdgYI3gkdqpv2DuOdV7rnljX3LwjioudywFJ78NB2A8AJobhMM7AqnxVK4mW/exec";
     const SECRET_CODE = "MGMPBINDO";
+    const STORAGE_KEY = "cbt_teks_rekon_9_state";
 
     let currentStudent = { name: "", class: "" };
     let cheatCount = 0;
     let examStarted = false;
     let examSubmitted = false;
     let timerInterval = null;
+    let timeLeft = 70 * 60;
+
+    let currentIndex = 0;
+    let userAnswers = {};
+    let shuffledQuestions = [];
+
+    // --- MANAJEMEN LOCALSTORAGE ---
+    function saveStateToStorage() {
+      if (!examStarted || examSubmitted) return;
+      const state = {
+        currentStudent,
+        cheatCount,
+        examStarted,
+        timeLeft,
+        currentIndex,
+        userAnswers,
+        shuffledQuestions
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function clearStorageState() {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+
+    function restoreStateFromStorage() {
+      const savedData = localStorage.getItem(STORAGE_KEY);
+      if (!savedData) return;
+
+      try {
+        const state = JSON.parse(savedData);
+        if (state && state.examStarted && !state.examSubmitted) {
+          currentStudent = state.currentStudent;
+          cheatCount = state.cheatCount || 0;
+          examStarted = true;
+          timeLeft = state.timeLeft || (70 * 60);
+          currentIndex = state.currentIndex || 0;
+          userAnswers = state.userAnswers || {};
+          shuffledQuestions = state.shuffledQuestions || [];
+
+          document.getElementById("badge-name").textContent = currentStudent.name;
+          document.getElementById("badge-class").textContent = currentStudent.class;
+          document.getElementById("badge-cheat").textContent = cheatCount;
+          document.getElementById("cheat-badge-display").textContent = `Peringatan: ${cheatCount}`;
+
+          document.getElementById("start-screen").style.display = "none";
+          document.getElementById("exam-screen").style.display = "block";
+
+          renderPalette();
+          loadQuestion(currentIndex);
+          startTimer(timeLeft);
+        }
+      } catch (e) {
+        console.error("Gagal memulihkan sesi ujian:", e);
+        clearStorageState();
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", restoreStateFromStorage);
 
     // Web Audio Synthesizer Alarm Suara Keras
     function playAlarmSound() {
@@ -453,6 +513,7 @@
         document.getElementById("cheat-badge-display").textContent = `Peringatan: ${cheatCount}`;
         document.getElementById("cheat-modal").style.display = "flex";
         playAlarmSound();
+        saveStateToStorage();
       }
     });
 
@@ -460,7 +521,7 @@
       document.getElementById("cheat-modal").style.display = "none";
     }
 
-    // MASTER DATABASE SOAL (BERDASARKAN TEMPLATE DOCX DENGAN PENGEMBANGAN MATRIX BENAR/SALAH)
+    // MASTER DATABASE SOAL
     const questionsMaster = [
       {
         id: 1, type: 'pilihan_ganda', weight: 10,
@@ -837,10 +898,6 @@
       }
     ];
 
-    let currentIndex = 0;
-    const userAnswers = {};
-    let shuffledQuestions = [];
-
     // Algoritma Fisher-Yates Shuffle
     function shuffleArray(array) {
       let arr = [...array];
@@ -885,11 +942,15 @@
       document.getElementById("start-screen").style.display = "none";
       document.getElementById("exam-screen").style.display = "block";
 
+      timeLeft = 70 * 60;
+      examStarted = true;
+      examSubmitted = false;
+
       prepareQuestions();
       renderPalette();
       loadQuestion(0);
-      startTimer(70 * 60); // 70 Menit
-      examStarted = true;
+      startTimer(timeLeft);
+      saveStateToStorage();
     }
 
     function renderPalette() {
@@ -907,6 +968,8 @@
 
     function loadQuestion(idx) {
       currentIndex = idx;
+      saveStateToStorage();
+
       const q = shuffledQuestions[idx];
       
       const mediaArea = document.getElementById("media-area");
@@ -940,6 +1003,7 @@
           input.onchange = () => {
             userAnswers[idx] = originalIdx;
             updatePaletteStatus();
+            saveStateToStorage();
           };
 
           const span = document.createElement("span");
@@ -971,6 +1035,7 @@
               userAnswers[idx] = userAnswers[idx].filter(i => i !== originalIdx);
             }
             updatePaletteStatus();
+            saveStateToStorage();
           };
 
           const span = document.createElement("span");
@@ -1049,6 +1114,7 @@
         input.oninput = (e) => {
           userAnswers[idx] = e.target.value.trim();
           updatePaletteStatus();
+          saveStateToStorage();
         };
         optContainer.appendChild(input);
 
@@ -1061,6 +1127,7 @@
         textarea.oninput = (e) => {
           userAnswers[idx] = e.target.value;
           updatePaletteStatus();
+          saveStateToStorage();
         };
         optContainer.appendChild(textarea);
       }
@@ -1074,12 +1141,14 @@
       if (!userAnswers[qIdx]) userAnswers[qIdx] = {};
       userAnswers[qIdx][sIdx] = val;
       updatePaletteStatus();
+      saveStateToStorage();
     }
 
     function saveMatchingAnswer(qIdx, pIdx, val) {
       if (!userAnswers[qIdx]) userAnswers[qIdx] = {};
       userAnswers[qIdx][pIdx] = val;
       updatePaletteStatus();
+      saveStateToStorage();
     }
 
     function updatePaletteStatus() {
@@ -1109,11 +1178,11 @@
       if (currentIndex < shuffledQuestions.length - 1) {
         loadQuestion(currentIndex + 1);
       } else {
-        submitExam();
+        submitExam(false);
       }
     }
 
-    function submitExam() {
+    function submitExam(isAutoSubmit = false) {
       let earnedPoints = 0;
       let maxPoints = 0;
       let answeredCount = 0;
@@ -1161,10 +1230,13 @@
         }
       });
 
-      const confirmSubmit = confirm(`Nama: ${currentStudent.name} (${currentStudent.class})\nTerjawab: ${answeredCount} dari ${shuffledQuestions.length} soal.\nPeringatan Berpindah Tab: ${cheatCount} kali.\nApakah Anda yakin ingin mengumpulkan?`);
-      if (!confirmSubmit) return;
+      if (!isAutoSubmit) {
+        const confirmSubmit = confirm(`Nama: ${currentStudent.name} (${currentStudent.class})\nTerjawab: ${answeredCount} dari ${shuffledQuestions.length} soal.\nPeringatan Berpindah Tab: ${cheatCount} kali.\nApakah Anda yakin ingin mengumpulkan?`);
+        if (!confirmSubmit) return;
+      }
 
       examSubmitted = true;
+      clearStorageState();
       if (timerInterval) clearInterval(timerInterval);
 
       const finalScore = Math.round((earnedPoints / maxPoints) * 100);
@@ -1182,6 +1254,7 @@
     }
 
     function resetToLoginScreen() {
+      clearStorageState();
       document.getElementById("result-modal").style.display = "none";
       document.getElementById("exam-screen").style.display = "none";
       document.getElementById("start-screen").style.display = "block";
@@ -1196,7 +1269,8 @@
       cheatCount = 0;
       examStarted = false;
       examSubmitted = false;
-      for (let member in userAnswers) delete userAnswers[member];
+      timeLeft = 70 * 60;
+      userAnswers = {};
     }
 
     function sendResultToGoogleSheet(nama, kelas, nilai, kecurangan) {
@@ -1287,24 +1361,32 @@
     }
 
     function startTimer(duration) {
-      let timer = duration;
+      timeLeft = duration;
       const display = document.getElementById('timer');
       if (timerInterval) clearInterval(timerInterval);
       
-      timerInterval = setInterval(function () {
-        let minutes = parseInt(timer / 60, 10);
-        let seconds = parseInt(timer % 60, 10);
-
+      const updateDisplay = (t) => {
+        let minutes = parseInt(t / 60, 10);
+        let seconds = parseInt(t % 60, 10);
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
-
         display.textContent = `Waktu: ${minutes}:${seconds}`;
+      };
 
-        if (--timer < 0) {
+      updateDisplay(timeLeft);
+
+      timerInterval = setInterval(function () {
+        timeLeft--;
+        saveStateToStorage();
+
+        if (timeLeft < 0) {
           clearInterval(timerInterval);
-          alert("Waktu pengerjaan telah habis!");
-          submitExam();
+          alert("Waktu pengerjaan telah habis! Jawaban otomatis dikumpulkan.");
+          submitExam(true);
+          return;
         }
+
+        updateDisplay(timeLeft);
       }, 1000);
     }
   </script>
